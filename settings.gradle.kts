@@ -1,4 +1,4 @@
-rootProject.name = "ktor-backend"
+rootProject.name = "ktor-template"
 
 include(
     "account-service"
