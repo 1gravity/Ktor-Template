@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
-    // retrieve task dependencies and types, e.g. with ./gradlew tiTree assemble
-    id("org.barfuin.gradle.taskinfo")
+    // for unknown reasons we need to use the fully qualified name for the plugin versions
+    // importing com.onegravity.Plugin doesn't help
+    com.onegravity.Plugin.topLevelPlugins.forEach { (n, v) -> id(n) version v }
 }
 
 buildscript {
@@ -18,14 +17,15 @@ allprojects {
         maven("https://dl.bintray.com/kotlin/ktor")
         maven("https://jitpack.io")
     }
-}
-gradle.taskGraph.whenReady(closureOf<TaskExecutionGraph> {
-    println("Found task graph: $this")
-    println("Found " + allTasks.size + " tasks.")
-    allTasks.forEach { task ->
-        println(task)
-        task.dependsOn.forEach { dep ->
-            println("  - $dep")
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xuse-experimental=kotlin.ExperimentalStdlibApi")
         }
     }
-})
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+}
