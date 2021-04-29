@@ -23,20 +23,6 @@ fun NormalOpenAPIRoute.accountRouting() {
     tag(Tags.Account) {
         route("/api/v1/admin/accounts") {
             /**
-             * Get a list of all accounts.
-             */
-            get<Unit, List<ResponseAccount>>(
-                info(
-                    summary = "Get all accounts.",
-                    description = "Return a list of all accounts"
-                ),
-                status(HttpStatusCode.OK),
-                example = listOf(accountExampleResponse),
-            ) {
-                respond(controller.getAccounts())
-            }
-
-            /**
              * Get one account.
              */
             get<AccountUUIDParam, ResponseAccount>(
@@ -107,44 +93,3 @@ fun NormalOpenAPIRoute.accountRouting() {
         }
     }
 }
-
-
-/**
- * Standard Ktor routing
- */
-//@Suppress("unused")
-//fun Route.accountRouting() {
-//
-//    val controller = getKoinInstance<AccountController>()
-//
-//    route("/api/v1/admin/accounts") {
-//        get {
-//            call.respond(HttpStatusCode.OK, controller.getAccounts())
-//        }
-//
-//        get("/{accountUUID}") {
-//            val accountUUID = call.getUUID("accountUUID")
-//            val account = controller.getAccount(accountUUID)
-//            call.respond(HttpStatusCode.OK, account)
-//        }
-//
-//        post {
-//            val account = call.receive<Account>().validate()
-//            val newAccount = controller.createAccount(account)
-//            call.respond(HttpStatusCode.OK, newAccount)
-//        }
-//
-//        put {
-//            val account = call.receive<Account>().validate()
-//            val updatedAccount = controller.updateAccount(account)
-//            call.respond(HttpStatusCode.OK, updatedAccount)
-//        }
-//
-//        delete("/{accountUUID}") {
-//            val accountUUID = call.getUUID("accountUUID")
-//            val account = controller.deleteAccount(accountUUID)
-//            call.respond(HttpStatusCode.OK, account)
-//        }
-//    }
-//
-//}
