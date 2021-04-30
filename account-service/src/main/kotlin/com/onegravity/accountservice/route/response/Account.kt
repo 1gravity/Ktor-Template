@@ -15,7 +15,7 @@ import com.onegravity.accountservice.persistence.model.account.Account as Persis
 fun PersistentAccount.toResponse() = Account(accountUUID, createdAt, modifiedAt, status)
 
 @Serializable
-@Response("Account Response.")
+@Response("Account object.", 200)
 data class Account(
     @RegularExpression(pattern = uuidPattern, "accountUUID doesn't match \"$uuidPattern\"")
     val accountUUID: String,

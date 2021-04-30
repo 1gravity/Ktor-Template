@@ -8,7 +8,6 @@ import com.papsign.ktor.openapigen.route.*
 import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.get
 import com.papsign.ktor.openapigen.route.response.respond
-import io.ktor.http.*
 
 fun NormalOpenAPIRoute.healthRouting() {
     val controller = getKoinInstance<HealthController>()
@@ -22,7 +21,6 @@ fun NormalOpenAPIRoute.healthRouting() {
                     summary = "Get service status.",
                     description = "Health check: returns the service name and uptime."
                 ),
-                status(HttpStatusCode.OK),
                 example = ServiceStatus(serviceName, "1000s")
             ) {
                 val status = controller.getServiceStatus()

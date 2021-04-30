@@ -15,7 +15,7 @@ fun PersistentCustomer.toResponse() =
     Customer(customerUUID, createdAt, modifiedAt, status, firstName, lastName, language, account.toResponse())
 
 @Serializable
-@Response("Customer Response.")
+@Response("Customer object.", 200)
 data class Customer(
     val customerUUID: String,
 

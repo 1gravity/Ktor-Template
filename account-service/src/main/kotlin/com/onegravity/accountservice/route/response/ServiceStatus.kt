@@ -4,5 +4,5 @@ import com.papsign.ktor.openapigen.annotations.Response
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Response("Service Status Response.")
+@Response("Status of the service.", 200)
 data class ServiceStatus(val serviceName: String, val uptime: String)

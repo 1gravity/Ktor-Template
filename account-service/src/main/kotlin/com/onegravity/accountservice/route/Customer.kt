@@ -13,9 +13,7 @@ import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.*
 import com.papsign.ktor.openapigen.route.response.respond
 import com.papsign.ktor.openapigen.route.route
-import com.papsign.ktor.openapigen.route.status
 import com.papsign.ktor.openapigen.route.tag
-import io.ktor.http.*
 import com.onegravity.accountservice.route.request.Customer as RequestCustomer
 import com.onegravity.accountservice.route.response.Customer as ResponseCustomer
 
@@ -33,7 +31,6 @@ fun NormalOpenAPIRoute.customerRouting() {
                     summary = "Get all customers.",
                     description = "Return a list of all customers"
                 ),
-                status(HttpStatusCode.OK),
                 example = listOf(customerExampleResponse, customerExampleResponse),
             ) {
                 respond(controller.getCustomers())
@@ -47,7 +44,6 @@ fun NormalOpenAPIRoute.customerRouting() {
                     summary = "Get a customer.",
                     description = "Return a customer by customerUUID"
                 ),
-                status(HttpStatusCode.OK),
                 exceptions = listOf(badRequest, customerNotFound),
                 example = customerExampleResponse,
             ) { params ->
@@ -64,7 +60,6 @@ fun NormalOpenAPIRoute.customerRouting() {
                     summary = "Create a customer.",
                     description = "Create a new customer record"
                 ),
-                status(HttpStatusCode.OK),
                 exceptions = listOf(badRequest, accountNotFound),
                 exampleRequest = customerExampleRequest,
                 exampleResponse = customerExampleResponse
@@ -82,7 +77,6 @@ fun NormalOpenAPIRoute.customerRouting() {
                     summary = "Update a customer.",
                     description = "Update an existing customer record"
                 ),
-                status(HttpStatusCode.OK),
                 exceptions = listOf(badRequest, customerNotFound),
                 exampleRequest = customerExampleRequest,
                 exampleResponse = customerExampleResponse
@@ -100,7 +94,6 @@ fun NormalOpenAPIRoute.customerRouting() {
                     summary = "Delete a customer.",
                     description = "Delete an existing customer record"
                 ),
-                status(HttpStatusCode.OK),
                 exceptions = listOf(badRequest, customerNotFound),
                 example = deletedCustomerExampleResponse
             ) { params ->
