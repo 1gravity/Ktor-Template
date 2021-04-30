@@ -5,21 +5,21 @@ import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
 import com.onegravity.accountservice.persistence.model.customer.Language
 import java.time.Instant
 
-val accountExampleResponse = Account(
+val accountExampleResponse = ResponseAccount(
     "990a3c80-2dbc-446b-9e97-b784c84d20ea",
     Instant.now(),
     Instant.now(),
     AccountStatus.Active
 )
 
-val deletedAccountExampleResponse = Account(
+val deletedAccountExampleResponse = ResponseAccount(
     "990a3c80-2dbc-446b-9e97-b784c84d20ea",
     Instant.now(),
     Instant.now(),
     AccountStatus.Deleted
 )
 
-val customerExampleResponse = Customer(
+val customerExampleResponse = ResponseCustomer(
     "300e47ad-263c-4e9a-a0b7-26d1229eaba9",
     Instant.now(),
     Instant.now(),
@@ -30,7 +30,7 @@ val customerExampleResponse = Customer(
     accountExampleResponse
 )
 
-val deletedCustomerExampleResponse = Customer(
+val deletedCustomerExampleResponse = ResponseCustomer(
     "300e47ad-263c-4e9a-a0b7-26d1229eaba9",
     Instant.now(),
     Instant.now(),

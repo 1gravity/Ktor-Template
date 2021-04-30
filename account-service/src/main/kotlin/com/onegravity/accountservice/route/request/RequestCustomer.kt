@@ -6,7 +6,7 @@ import com.papsign.ktor.openapigen.annotations.type.string.length.Length
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Customer(
+data class RequestCustomer(
     val status: CustomerStatus,
 
     @Length(2, 127)

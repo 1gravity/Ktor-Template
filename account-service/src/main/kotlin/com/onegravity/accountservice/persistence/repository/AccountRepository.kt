@@ -1,7 +1,7 @@
 package com.onegravity.accountservice.persistence.repository
 
 import com.onegravity.accountservice.util.NotFoundException
-import com.onegravity.accountservice.route.request.Account as RequestAccount
+import com.onegravity.accountservice.route.request.RequestAccount as RequestAccount
 import com.onegravity.accountservice.persistence.model.account.Account as PersistentAccount
 
 interface AccountRepository {

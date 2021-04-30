@@ -4,7 +4,7 @@ import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
 import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
 import com.onegravity.accountservice.persistence.model.customer.Language
-import com.onegravity.accountservice.route.response.Customer
+import com.onegravity.accountservice.route.response.ResponseCustomer as Customer
 import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.GivenScope

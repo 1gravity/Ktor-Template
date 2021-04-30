@@ -5,8 +5,8 @@ import com.onegravity.accountservice.api.account.verifyAccount
 import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
 import com.onegravity.accountservice.persistence.model.customer.Language
 import com.onegravity.accountservice.route.request.uuidPattern
-import com.onegravity.accountservice.route.response.Account
-import com.onegravity.accountservice.route.response.Customer
+import com.onegravity.accountservice.route.response.ResponseAccount as Account
+import com.onegravity.accountservice.route.response.ResponseCustomer as Customer
 import com.onegravity.accountservice.util.gson
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldHaveLengthBetween

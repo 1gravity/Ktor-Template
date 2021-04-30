@@ -12,12 +12,12 @@ import kotlinx.serialization.UseSerializers
 import java.time.Instant
 import com.onegravity.accountservice.persistence.model.account.Account as PersistentAccount
 
-fun PersistentAccount.toResponse() = Account(accountUUID, createdAt, modifiedAt, status)
+fun PersistentAccount.toResponse() = ResponseAccount(accountUUID, createdAt, modifiedAt, status)
 
 @Serializable
 @Response("Account object.", 200)
-data class Account(
-    @RegularExpression(pattern = uuidPattern, "accountUUID doesn't match \"$uuidPattern\"")
+data class ResponseAccount(
+    @RegularExpression(pattern = uuidPattern)
     val accountUUID: String,
 
     val createdAt: Instant,

@@ -11,7 +11,7 @@ import org.ktorm.entity.firstOrNull
 import org.ktorm.entity.toList
 import java.time.Instant
 import java.util.*
-import com.onegravity.accountservice.route.request.Customer as RequestCustomer
+import com.onegravity.accountservice.route.request.RequestCustomer
 import com.onegravity.accountservice.persistence.model.customer.Customer as PersistentCustomer
 
 class CustomerRepositoryImpl : CustomerRepository, KoinComponent {

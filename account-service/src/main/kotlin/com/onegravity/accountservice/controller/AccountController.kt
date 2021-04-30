@@ -1,7 +1,7 @@
 package com.onegravity.accountservice.controller
 
-import com.onegravity.accountservice.route.response.Account as ResponseAccount
-import com.onegravity.accountservice.route.request.Account as RequestAccount
+import com.onegravity.accountservice.route.response.ResponseAccount
+import com.onegravity.accountservice.route.request.RequestAccount
 import com.onegravity.accountservice.util.NotFoundException
 
 interface AccountController {

@@ -9,8 +9,8 @@ import com.onegravity.accountservice.util.getKoinInstance
 import com.papsign.ktor.openapigen.route.*
 import com.papsign.ktor.openapigen.route.path.normal.*
 import com.papsign.ktor.openapigen.route.response.respond
-import com.onegravity.accountservice.route.request.Account as RequestAccount
-import com.onegravity.accountservice.route.response.Account as ResponseAccount
+import com.onegravity.accountservice.route.request.RequestAccount
+import com.onegravity.accountservice.route.response.ResponseAccount
 
 fun NormalOpenAPIRoute.accountRouting() {
 

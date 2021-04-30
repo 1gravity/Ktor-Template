@@ -1,7 +1,7 @@
 package com.onegravity.accountservice.api.account
 
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.route.response.Account
+import com.onegravity.accountservice.route.response.ResponseAccount as Account
 import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec

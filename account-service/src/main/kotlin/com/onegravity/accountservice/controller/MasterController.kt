@@ -2,8 +2,8 @@ package com.onegravity.accountservice.controller
 
 import com.onegravity.accountservice.route.response.ServiceStatus
 import com.onegravity.accountservice.route.response.toResponse
-import com.onegravity.accountservice.route.request.Account as RequestAccount
-import com.onegravity.accountservice.route.request.Customer as RequestCustomer
+import com.onegravity.accountservice.route.request.RequestAccount
+import com.onegravity.accountservice.route.request.RequestCustomer
 import com.onegravity.accountservice.persistence.repository.AccountRepository
 import com.onegravity.accountservice.persistence.repository.CustomerRepository
 import com.onegravity.accountservice.util.getProperty

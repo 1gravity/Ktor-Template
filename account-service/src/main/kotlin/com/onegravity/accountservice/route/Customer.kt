@@ -14,8 +14,8 @@ import com.papsign.ktor.openapigen.route.path.normal.*
 import com.papsign.ktor.openapigen.route.response.respond
 import com.papsign.ktor.openapigen.route.route
 import com.papsign.ktor.openapigen.route.tag
-import com.onegravity.accountservice.route.request.Customer as RequestCustomer
-import com.onegravity.accountservice.route.response.Customer as ResponseCustomer
+import com.onegravity.accountservice.route.request.RequestCustomer
+import com.onegravity.accountservice.route.response.ResponseCustomer
 
 fun NormalOpenAPIRoute.customerRouting() {
 

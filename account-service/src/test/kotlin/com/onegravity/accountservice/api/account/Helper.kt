@@ -3,7 +3,7 @@ package com.onegravity.accountservice.api.account
 import com.github.michaelbull.result.runCatching
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
 import com.onegravity.accountservice.route.request.uuidPattern
-import com.onegravity.accountservice.route.response.Account
+import com.onegravity.accountservice.route.response.ResponseAccount as Account
 import com.onegravity.accountservice.util.gson
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldMatch

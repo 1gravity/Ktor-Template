@@ -1,7 +1,7 @@
 package com.onegravity.accountservice.persistence.repository
 
 import com.onegravity.accountservice.util.NotFoundException
-import com.onegravity.accountservice.route.request.Customer as RequestCustomer
+import com.onegravity.accountservice.route.request.RequestCustomer
 import com.onegravity.accountservice.persistence.model.customer.Customer as PersistentCustomer
 
 interface CustomerRepository {
