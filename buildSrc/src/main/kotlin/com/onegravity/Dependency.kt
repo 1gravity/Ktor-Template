@@ -5,9 +5,12 @@ object Dependency {
     private const val ktorVersion = "1.5.3"
     private const val koinVersion = "3.0.1"
     private const val kotlinSerializationVersion = "1.1.0"
+
     private const val postgresVersion = "42.2.20"
     private const val ktormVersion = "3.3.0"
     private const val flywayVersion = "7.7.1"
+    private const val hikariCPVersion = "4.0.3"
+
     private const val openApiGenVersion = "0.2-beta.17"
     private const val kotlinResultVersion = "1.1.11"
     private const val logbackVersion = "1.2.3"
@@ -38,6 +41,8 @@ object Dependency {
         "org.ktorm:ktorm-core:$ktormVersion",
         "org.ktorm:ktorm-support-postgresql:$ktormVersion",
         "org.ktorm:ktorm-jackson:$ktormVersion",
+        // HikariCP (Connection Pooling)
+        "com.zaxxer:HikariCP:$hikariCPVersion",
         // Flyway (DB migration)
         "org.flywaydb:flyway-core:$flywayVersion",
 
