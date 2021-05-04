@@ -1,9 +1,10 @@
 package com.onegravity.accountservice.api
 
 import com.onegravity.accountservice.route.response.ServiceStatus
-import com.onegravity.accountservice.util.testApplication
-import com.onegravity.accountservice.util.getPropertyOrThrow
+import com.onegravity.accountservice.util.Config
+import com.onegravity.accountservice.util.getKoinInstance
 import com.onegravity.accountservice.util.gson
+import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -17,6 +18,8 @@ import io.ktor.server.testing.*
 class HealthTest : BehaviorSpec({
     // GET /status
     testApplication { testEngine ->
+        val config = getKoinInstance<Config>()
+
         `when`("I call GET /status") {
             val call = testEngine.handleRequest(HttpMethod.Get, "/status")
 
@@ -29,7 +32,7 @@ class HealthTest : BehaviorSpec({
 
             then("the response body should have the correct 'serviceName'") {
                 status.serviceName shouldNotBe null
-                status.serviceName shouldMatch getPropertyOrThrow("ktor.serviceName")
+                status.serviceName shouldMatch config.getPropertyOrThrow("ktor.serviceName")
             }
 
             then("the response body should have a correct 'uptime' field") {

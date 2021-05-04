@@ -1,6 +1,7 @@
 package com.onegravity.accountservice.application
 
-import com.onegravity.accountservice.util.getProperty
+import com.onegravity.accountservice.util.Config
+import com.onegravity.accountservice.util.getKoinInstance
 import com.papsign.ktor.openapigen.OpenAPIGen
 import com.papsign.ktor.openapigen.openAPIGen
 import com.papsign.ktor.openapigen.schema.namer.DefaultSchemaNamer
@@ -12,11 +13,13 @@ import kotlin.reflect.KType
 
 fun Application.openAPIGenerator() {
 
+    val config = getKoinInstance<Config>()
+
     // install OpenAPI generator
     install(OpenAPIGen) {
-        val serviceName = getProperty("ktor.serviceName", "Service")
-        val serviceContact = getProperty("ktor.serviceContact", "Service")
-        val serviceEmail = getProperty("ktor.serviceEmail", "Service")
+        val serviceName = config.getProperty("ktor.serviceName", "Service")
+        val serviceContact = config.getProperty("ktor.serviceContact", "Service")
+        val serviceEmail = config.getProperty("ktor.serviceEmail", "Service")
         info {
             version = "1.0.0"
             title = "$serviceName API"
@@ -27,9 +30,9 @@ fun Application.openAPIGenerator() {
             }
         }
 
-        val protocol = getProperty("ktor.deployment.protocol")
-        val host = getProperty("ktor.deployment.host")
-        val port = getProperty("ktor.deployment.port")
+        val protocol = config.getProperty("ktor.deployment.protocol")
+        val host = config.getProperty("ktor.deployment.host")
+        val port = config.getProperty("ktor.deployment.port")
         server("$protocol://$host:$port") {
             description = serviceName
         }

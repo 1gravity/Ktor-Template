@@ -2,17 +2,20 @@ package com.onegravity.accountservice.route
 
 import com.onegravity.accountservice.controller.HealthController
 import com.onegravity.accountservice.route.response.ServiceStatus
+import com.onegravity.accountservice.util.Config
 import com.onegravity.accountservice.util.getKoinInstance
-import com.onegravity.accountservice.util.getProperty
-import com.papsign.ktor.openapigen.route.*
+import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.get
 import com.papsign.ktor.openapigen.route.response.respond
+import com.papsign.ktor.openapigen.route.route
+import com.papsign.ktor.openapigen.route.tag
 
 fun NormalOpenAPIRoute.healthRouting() {
+    val config = getKoinInstance<Config>()
     val controller = getKoinInstance<HealthController>()
 
-    val serviceName = getProperty("ktor.serviceName", "my-service")
+    val serviceName = config.getProperty("ktor.serviceName", "my-service")
 
     tag(Tags.Misc) {
         route("/status")
