@@ -1,7 +1,5 @@
 package com.onegravity.accountservice.persistence.database
 
-import com.onegravity.accountservice.persistence.exposed.model.Account
-import com.onegravity.accountservice.persistence.exposed.model.Customer
 import com.onegravity.accountservice.persistence.model.account.Accounts
 import com.onegravity.accountservice.persistence.model.customer.Customers
 import com.onegravity.accountservice.persistence.model.device.Devices
@@ -9,10 +7,6 @@ import com.onegravity.accountservice.persistence.model.email.Emails
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.ktorm.entity.sequenceOf
@@ -41,35 +35,7 @@ abstract class DatabaseBaseImpl(logLevel: LogLevel = LogLevel.WARN, cleanDB: Boo
         HikariDataSource(config)
     }
 
-    private val database2 by lazy {
-        logger.debug("exposed database url:      $url")
-        logger.debug("exposed database driver:   $driver")
-        logger.debug("exposed database user:     $user")
-        logger.debug("exposed database password: ***")
-
-        // with DataSource
-        org.jetbrains.exposed.sql.Database.connect(
-            dataSource
-        ).also {
-            transaction {
-                SchemaUtils.create(Account, Customer)
-                Account.selectAll().forEach {
-                    logger.error("uuid: ${it[Account.accountUUID]}")
-                }
-                Customer.selectAll().forEach {
-                    logger.error("uuid: ${it[Customer.customerUUID]}")
-                    logger.error("firstName: ${it[Customer.firstName]}")
-                    logger.error("lastName: ${it[Customer.lastName]}")
-                    logger.error("accountId: ${it[Customer.accountId]}")
-                }
-                Customer.insert {
-                }
-            }
-        }
-    }
-
     private val database by lazy {
-        database2
         logger.debug("database url:      $url")
         logger.debug("database driver:   $driver")
         logger.debug("database user:     $user")
