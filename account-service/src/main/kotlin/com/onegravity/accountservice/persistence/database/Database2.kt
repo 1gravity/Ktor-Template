@@ -1,4 +1,10 @@
 package com.onegravity.accountservice.persistence.database
 
-class Database2 {
+import com.onegravity.accountservice.persistence.exposed.model.Account
+
+
+interface Database2 {
+
+    fun account(): DatabaseOperations<Account>
+
 }

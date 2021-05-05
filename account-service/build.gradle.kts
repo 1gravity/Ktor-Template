@@ -20,6 +20,8 @@ dependencies {
     Dependency.implementation.forEach(::implementation)
     Dependency.runtime.forEach(::runtimeOnly)
     Dependency.testImplementation.forEach(::testImplementation)
+
+    implementation("org.jetbrains.exposed:exposed:0.17.13")
 }
 
 application {

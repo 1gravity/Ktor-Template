@@ -12,6 +12,8 @@ import org.ktorm.entity.EntitySequence
 
 interface Database {
 
+    fun account(): DatabaseOperations<Account>
+
     fun accounts(): EntitySequence<Account, Accounts>
 
     fun customers(): EntitySequence<Customer, Customers>

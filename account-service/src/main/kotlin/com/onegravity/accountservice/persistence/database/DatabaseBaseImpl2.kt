@@ -20,7 +20,7 @@ import org.ktorm.logging.ConsoleLogger
 import org.ktorm.logging.LogLevel
 import org.slf4j.Logger
 
-abstract class DatabaseBaseImpl2(logLevel: LogLevel = LogLevel.WARN, cleanDB: Boolean = false) : Database, KoinComponent {
+abstract class DatabaseBaseImpl2(logLevel: LogLevel = LogLevel.WARN, cleanDB: Boolean = false) : Database2, KoinComponent {
 
     private val logger by inject<Logger>()
 
@@ -86,14 +86,6 @@ abstract class DatabaseBaseImpl2(logLevel: LogLevel = LogLevel.WARN, cleanDB: Bo
             flyway.migrate()
         }
 
-        // without DataSource
-//        org.ktorm.database.Database.connect(
-//            url = url,
-//            driver = driver,
-//            user = user,
-//            password = password,
-//            logger = ConsoleLogger(LogLevel.DEBUG)
-//        )
     }
 
     private val flyway: Flyway by lazy {
@@ -103,12 +95,12 @@ abstract class DatabaseBaseImpl2(logLevel: LogLevel = LogLevel.WARN, cleanDB: Bo
             .load()
     }
 
-    override fun accounts() = database.sequenceOf(Accounts)
+    override fun account(): DatabaseOperations<Account> {
 
-    override fun customers() = database.sequenceOf(Customers, withReferences = true)
+    }
 
-    override fun emails() = database.sequenceOf(Emails, withReferences = true)
+}
 
-    override fun devices() = database.sequenceOf(Devices, withReferences = true)
+class AccountOperations {
 
 }
