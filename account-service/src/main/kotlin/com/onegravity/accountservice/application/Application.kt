@@ -3,7 +3,6 @@ package com.onegravity.accountservice.application
 import com.onegravity.accountservice.controller.adapters.GsonInstantAdapter
 import com.onegravity.accountservice.controller.controllerModule
 import com.onegravity.accountservice.persistence.databaseModule
-import com.onegravity.accountservice.persistence.repository.repositoryModule
 import com.onegravity.accountservice.route.accountRouting
 import com.onegravity.accountservice.route.customerRouting
 import com.onegravity.accountservice.route.healthRouting
@@ -32,7 +31,6 @@ fun Application.mainModule() {
             applicationModule(environment),
             databaseModule(environment),
             controllerModule,
-            repositoryModule
         )
     }
 

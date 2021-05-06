@@ -3,7 +3,7 @@ package com.onegravity.accountservice.api.customer
 import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
 import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
-import com.onegravity.accountservice.route.response.ResponseCustomer as Customer
+import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec
@@ -28,7 +28,7 @@ class GetCustomer : BehaviorSpec( {
             }
 
             then("the response body should contain the newly created customer") {
-                val customer = gson.fromJson(call.response.content.toString(), Customer::class.java)
+                val customer = gson.fromJson(call.response.content.toString(), ResponseCustomer::class.java)
                 customer shouldBe newCustomer
             }
         }

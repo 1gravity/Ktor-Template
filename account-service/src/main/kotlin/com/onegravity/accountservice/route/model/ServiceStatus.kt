@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.route.response
+package com.onegravity.accountservice.route.model
 
 import com.papsign.ktor.openapigen.annotations.Response
 import kotlinx.serialization.Serializable

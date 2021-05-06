@@ -3,19 +3,16 @@
 package com.onegravity.accountservice.route
 
 import com.onegravity.accountservice.controller.CustomerController
-import com.onegravity.accountservice.route.request.AccountUUIDParam
-import com.onegravity.accountservice.route.request.CustomerUUIDParam
-import com.onegravity.accountservice.route.request.customerExampleRequest
-import com.onegravity.accountservice.route.response.customerExampleResponse
-import com.onegravity.accountservice.route.response.deletedCustomerExampleResponse
+import com.onegravity.accountservice.route.misc.*
+import com.onegravity.accountservice.route.model.customer.CreateCustomer
+import com.onegravity.accountservice.route.model.customer.ResponseCustomer
+import com.onegravity.accountservice.route.model.customer.UpdateCustomer
 import com.onegravity.accountservice.util.getKoinInstance
 import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.*
 import com.papsign.ktor.openapigen.route.response.respond
 import com.papsign.ktor.openapigen.route.route
 import com.papsign.ktor.openapigen.route.tag
-import com.onegravity.accountservice.route.request.RequestCustomer
-import com.onegravity.accountservice.route.response.ResponseCustomer
 
 fun NormalOpenAPIRoute.customerRouting() {
 
@@ -55,34 +52,32 @@ fun NormalOpenAPIRoute.customerRouting() {
             /**
              * Create a new customer.
              */
-            post<AccountUUIDParam, ResponseCustomer, RequestCustomer>(
+            post<Unit, ResponseCustomer, CreateCustomer>(
                 info(
                     summary = "Create a customer.",
                     description = "Create a new customer record"
                 ),
                 exceptions = listOf(badRequest, accountNotFound),
-                exampleRequest = customerExampleRequest,
+                exampleRequest = customerCreateExample,
                 exampleResponse = customerExampleResponse
-            ) { params, customer ->
-                val accountUUID = params.accountUUID
-                val newCustomer = controller.createCustomer(accountUUID, customer)
+            ) { _, customer ->
+                val newCustomer = controller.createCustomer(customer)
                 respond(newCustomer)
             }
 
             /**
              * Update a customer.
              */
-            put<CustomerUUIDParam, ResponseCustomer, RequestCustomer>(
+            put<Unit, ResponseCustomer, UpdateCustomer>(
                 info(
                     summary = "Update a customer.",
                     description = "Update an existing customer record"
                 ),
                 exceptions = listOf(badRequest, customerNotFound),
-                exampleRequest = customerExampleRequest,
+                exampleRequest = customerUpdateExample,
                 exampleResponse = customerExampleResponse
-            ) { params, customer ->
-                val customerUUID = params.customerUUID
-                val updateCustomer = controller.updateCustomer(customerUUID, customer)
+            ) { _, customer ->
+                val updateCustomer = controller.updateCustomer(customer)
                 respond(updateCustomer)
             }
 

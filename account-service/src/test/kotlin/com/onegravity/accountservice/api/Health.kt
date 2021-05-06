@@ -1,6 +1,6 @@
 package com.onegravity.accountservice.api
 
-import com.onegravity.accountservice.route.response.ServiceStatus
+import com.onegravity.accountservice.route.model.ServiceStatus
 import com.onegravity.accountservice.util.Config
 import com.onegravity.accountservice.util.getKoinInstance
 import com.onegravity.accountservice.util.gson

@@ -2,7 +2,7 @@ package com.onegravity.accountservice.api.account
 
 import com.github.michaelbull.result.runCatching
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.route.response.ResponseAccount as Account
+import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,7 +18,7 @@ class UpdateAccount : BehaviorSpec( {
     testApplication { testEngine ->
         val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
 
-        `when`("I call PUT /api/v1/admin/accounts/{accountUUID}") {
+        `when`("I call PUT /api/v1/admin/accounts") {
             val (updatedAccount, status) = updateAccount(testEngine, newAccount!!)
 
             then("the updated account should not be null") {
@@ -41,7 +41,7 @@ class UpdateAccount : BehaviorSpec( {
             }
         }
 
-        val account2Update = Account(newAccount!!.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
+        val account2Update = ResponseAccount(newAccount!!.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
 
         `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with updated fields") {
             val (updatedAccount, status) = updateAccount(testEngine, account2Update)
@@ -70,8 +70,9 @@ class UpdateAccount : BehaviorSpec( {
         }
 
         `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with an invalid uuid") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/123456") {
-                setBody(gson.toJson(account2Update))
+            val account = ResponseAccount("123456", Instant.now(), Instant.now(), AccountStatus.Blocked)
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+                setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
 
@@ -81,8 +82,9 @@ class UpdateAccount : BehaviorSpec( {
         }
 
         `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with a non existing uuid") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/00000000-0000-0000-0000-000000000000") {
-                setBody(gson.toJson(account2Update))
+            val account = ResponseAccount("00000000-0000-0000-0000-000000000000", Instant.now(), Instant.now(), AccountStatus.Blocked)
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+                setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
 
@@ -93,14 +95,14 @@ class UpdateAccount : BehaviorSpec( {
     }
 } )
 
-fun updateAccount(testEngine: TestApplicationEngine, account: Account): Pair<Account?, HttpStatusCode> {
-    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/${account.accountUUID}") {
+fun updateAccount(testEngine: TestApplicationEngine, account: ResponseAccount): Pair<ResponseAccount?, HttpStatusCode> {
+    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
         setBody(gson.toJson(account))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
     }
 
     val result = runCatching {
-        gson.fromJson(call.response.content.toString(), Account::class.java)
+        gson.fromJson(call.response.content.toString(), ResponseAccount::class.java)
     }
     return Pair(result.component1(), call.response.status() ?: HttpStatusCode.InternalServerError)
 }

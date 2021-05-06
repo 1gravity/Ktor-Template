@@ -1,6 +1,6 @@
 package com.onegravity.accountservice.controller
 
-import com.onegravity.accountservice.route.response.ServiceStatus
+import com.onegravity.accountservice.route.model.ServiceStatus
 
 interface HealthController {
 

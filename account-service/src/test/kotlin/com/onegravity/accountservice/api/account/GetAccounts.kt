@@ -2,7 +2,7 @@ package com.onegravity.accountservice.api.account
 
 import com.google.gson.reflect.TypeToken
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.route.response.ResponseAccount as Account
+import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApplication
 import io.kotest.core.spec.style.BehaviorSpec
@@ -29,8 +29,8 @@ class GetAccounts : BehaviorSpec( {
             then("the response body should contain a list of accounts") {
                 val json = call.response.content
 
-                val collectionType = object : TypeToken<Collection<Account>>() {}.type
-                val accounts = gson.fromJson<List<Account>>(json.toString(), collectionType)
+                val collectionType = object : TypeToken<Collection<ResponseAccount>>() {}.type
+                val accounts = gson.fromJson<List<ResponseAccount>>(json.toString(), collectionType)
 
                 accounts.isEmpty() shouldNotBe true
 

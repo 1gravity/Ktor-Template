@@ -1,7 +1,8 @@
 package com.onegravity.accountservice.controller
 
-import com.onegravity.accountservice.route.response.ResponseAccount
-import com.onegravity.accountservice.route.request.RequestAccount
+import com.onegravity.accountservice.route.model.account.CreateAccount
+import com.onegravity.accountservice.route.model.account.ResponseAccount
+import com.onegravity.accountservice.route.model.account.UpdateAccount
 import com.onegravity.accountservice.util.NotFoundException
 
 interface AccountController {
@@ -12,10 +13,10 @@ interface AccountController {
     suspend fun getAccount(accountUUID: String): ResponseAccount
 
     @Throws(NotFoundException::class)
-    suspend fun createAccount(account: RequestAccount): ResponseAccount
+    suspend fun createAccount(account: CreateAccount): ResponseAccount
 
     @Throws(NotFoundException::class)
-    suspend fun updateAccount(accountUUID: String, account: RequestAccount): ResponseAccount
+    suspend fun updateAccount(account: UpdateAccount): ResponseAccount
 
     @Throws(NotFoundException::class)
     suspend fun deleteAccount(accountUUID: String): ResponseAccount

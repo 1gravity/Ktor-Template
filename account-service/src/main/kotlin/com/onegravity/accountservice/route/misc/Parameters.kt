@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.route.request
+package com.onegravity.accountservice.route.misc
 
 import com.papsign.ktor.openapigen.annotations.Path
 import com.papsign.ktor.openapigen.annotations.parameters.PathParam

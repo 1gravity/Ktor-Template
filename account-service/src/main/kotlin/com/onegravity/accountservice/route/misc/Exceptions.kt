@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.route
+package com.onegravity.accountservice.route.misc
 
 import com.onegravity.accountservice.util.NotFoundException
 import com.papsign.ktor.openapigen.APIException.APIExceptionBuilder.Companion.apiException

@@ -1,18 +1,15 @@
 @file:UseSerializers(KotlinxInstantSerializer::class)
 
-package com.onegravity.accountservice.route.response
+package com.onegravity.accountservice.route.model.account
 
 import com.onegravity.accountservice.controller.adapters.KotlinxInstantSerializer
 import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.route.request.uuidPattern
+import com.onegravity.accountservice.route.misc.uuidPattern
 import com.papsign.ktor.openapigen.annotations.Response
 import com.papsign.ktor.openapigen.annotations.type.string.pattern.RegularExpression
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import java.time.Instant
-import com.onegravity.accountservice.persistence.model.account.Account as PersistentAccount
-
-fun PersistentAccount.toResponse() = ResponseAccount(accountUUID, createdAt, modifiedAt, status)
 
 @Serializable
 @Response("Account object.", 200)

@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.route
+package com.onegravity.accountservice.route.misc
 
 import com.papsign.ktor.openapigen.APITag
 

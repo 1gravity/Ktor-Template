@@ -1,7 +1,8 @@
 package com.onegravity.accountservice.route
 
 import com.onegravity.accountservice.controller.HealthController
-import com.onegravity.accountservice.route.response.ServiceStatus
+import com.onegravity.accountservice.route.misc.Tags
+import com.onegravity.accountservice.route.model.ServiceStatus
 import com.onegravity.accountservice.util.Config
 import com.onegravity.accountservice.util.getKoinInstance
 import com.papsign.ktor.openapigen.route.info
