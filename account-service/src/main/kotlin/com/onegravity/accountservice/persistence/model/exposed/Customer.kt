@@ -1,6 +1,5 @@
-package com.onegravity.accountservice.persistence.exposed.model.customer
+package com.onegravity.accountservice.persistence.model.exposed
 
-import com.onegravity.accountservice.persistence.exposed.model.account.Account
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.EntityID
@@ -18,5 +17,5 @@ class Customer(id: EntityID<Int>) : Entity<Int>(id) {
     var lastName by Customers.lastName
     var language by Customers.language
 
-    val accountId by Account referencedOn Customers.accountId
+    var account by Account referencedOn Customers.accountId
 }

@@ -1,8 +1,8 @@
 package com.onegravity.accountservice.route.misc
 
-import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
-import com.onegravity.accountservice.persistence.model.customer.Language
+import com.onegravity.accountservice.persistence.model.AccountStatus
+import com.onegravity.accountservice.persistence.model.CustomerStatus
+import com.onegravity.accountservice.persistence.model.Language
 import com.onegravity.accountservice.route.model.account.CreateAccount
 import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.route.model.account.UpdateAccount

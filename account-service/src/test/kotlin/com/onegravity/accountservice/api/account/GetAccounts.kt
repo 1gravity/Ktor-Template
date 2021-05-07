@@ -1,10 +1,10 @@
 package com.onegravity.accountservice.api.account
 
 import com.google.gson.reflect.TypeToken
-import com.onegravity.accountservice.persistence.model.account.AccountStatus
+import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.util.gson
-import com.onegravity.accountservice.util.testApplication
+import com.onegravity.accountservice.util.testApps
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -13,13 +13,13 @@ import io.ktor.server.testing.*
 
 @Suppress("unused")
 class GetAccounts : BehaviorSpec( {
-    testApplication { testEngine ->
+    testApps(this) { testEngine, prefix ->
         // create 10 test accounts
         repeat(10) {
             createAccount(testEngine, AccountStatus.Active)
         }
 
-        `when`("I call GET /api/v1/admin/accounts") {
+        `when`("$prefix - I call GET /api/v1/admin/accounts") {
             val call = testEngine.handleRequest(HttpMethod.Get, "/api/v1/admin/accounts")
 
             then("the response status should be OK") {

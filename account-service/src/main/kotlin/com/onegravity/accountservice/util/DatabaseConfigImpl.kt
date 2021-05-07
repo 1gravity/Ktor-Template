@@ -1,10 +1,9 @@
-package com.onegravity.accountservice.persistence.database
+package com.onegravity.accountservice.util
 
-import com.onegravity.accountservice.util.Config
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.ktorm.logging.LogLevel
 
-class DatabaseImpl(logLevel: LogLevel = LogLevel.WARN) : DatabaseBaseImpl(logLevel) {
+object DatabaseConfigImpl : DatabaseConfig, KoinComponent {
 
     private val config: Config by inject()
 
@@ -16,7 +15,7 @@ class DatabaseImpl(logLevel: LogLevel = LogLevel.WARN) : DatabaseBaseImpl(logLev
 
     override val driver = config.getPropertyOrThrow("ktor.database.driver")
 
-    override val user = config.getPropertyOrThrow("ktor.database.user")
+    override val userName = config.getPropertyOrThrow("ktor.database.user")
 
     override val password = config.getPropertyOrThrow("ktor.database.password")
 

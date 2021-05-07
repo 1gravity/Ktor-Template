@@ -1,14 +1,12 @@
-package com.onegravity.accountservice.persistence
+package com.onegravity.accountservice.util
 
-import com.onegravity.accountservice.persistence.database.DatabaseBaseImpl
-import com.onegravity.accountservice.util.Config
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.ktorm.logging.LogLevel
 import org.testcontainers.containers.PostgreSQLContainer
 
-class TestDatabaseImpl(logLevel: LogLevel = LogLevel.WARN) : DatabaseBaseImpl(logLevel) {
+object TestDatabaseConfigImpl : DatabaseConfig, KoinComponent {
 
-    private val config by inject<Config>()
+    private val config: Config by inject()
 
     private val dbContainer = PostgreSQLContainer<Nothing>("postgres:13.2").apply {
         withDatabaseName(config.getPropertyOrThrow("ktor.database.name"))
@@ -21,7 +19,7 @@ class TestDatabaseImpl(logLevel: LogLevel = LogLevel.WARN) : DatabaseBaseImpl(lo
 
     override val driver: String = dbContainer.driverClassName
 
-    override val user: String = dbContainer.username
+    override val userName: String = dbContainer.username
 
     override val password: String = dbContainer.password
 

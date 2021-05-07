@@ -1,6 +1,6 @@
 package com.onegravity.accountservice.controller
 
-import com.onegravity.accountservice.persistence.database.Database
+import com.onegravity.accountservice.persistence.model.DaoProvider
 import com.onegravity.accountservice.route.model.ServiceStatus
 import com.onegravity.accountservice.route.model.account.CreateAccount
 import com.onegravity.accountservice.route.model.account.UpdateAccount
@@ -11,16 +11,16 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.math.roundToInt
 
-class MasterController : AccountController, CustomerController, EmailController, DeviceController, HealthController,
+object MasterController : AccountController, CustomerController, EmailController, DeviceController, HealthController,
     KoinComponent {
 
     private val config: Config by inject()
 
-    private val database: Database by inject()
-    private val accounts = database.accountDao()
-    private val customers = database.customerDao()
+    private val daoProvider: DaoProvider by inject()
 
     /* Account operations */
+
+    private val accounts = daoProvider.accountDao()
 
     override suspend fun getAccounts() = accounts.getAll()
 
@@ -33,6 +33,8 @@ class MasterController : AccountController, CustomerController, EmailController,
     override suspend fun deleteAccount(accountUUID: String) = accounts.delete(accountUUID)
 
     /* Customer operations */
+
+    private val customers = daoProvider.customerDao()
 
     override suspend fun getCustomers() = customers.getAll()
 

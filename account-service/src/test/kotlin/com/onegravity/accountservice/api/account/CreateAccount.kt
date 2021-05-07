@@ -1,16 +1,18 @@
 package com.onegravity.accountservice.api.account
 
-import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.util.testApplication
+import com.onegravity.accountservice.persistence.model.AccountStatus
+import com.onegravity.accountservice.util.testApps
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.ktor.http.*
+import io.ktor.server.testing.*
+import java.util.*
 
 @Suppress("unused")
 class CreateAccount : BehaviorSpec( {
-    testApplication { testEngine ->
-        `when`("I call POST /api/v1/admin/accounts") {
+    testApps(this) { testEngine, prefix ->
+        `when`("$prefix - I call POST /api/v1/admin/accounts") {
             val (account, status) = createAccount(testEngine, AccountStatus.Active)
 
             then("the response mustn't be null") {
@@ -22,13 +24,13 @@ class CreateAccount : BehaviorSpec( {
             }
 
             then("the response body should be the created account") {
-                verifyAccount(account!!)
+                verifyAccount(account)
                 account.status shouldBe AccountStatus.Active
                 account.createdAt shouldBe account.modifiedAt
             }
         }
 
-        `when`("I call POST /api/v1/admin/accounts to create a deleted account") {
+        `when`("$prefix - I call POST /api/v1/admin/accounts to create a deleted account") {
             val (account, status) = createAccount(testEngine, AccountStatus.Deleted)
 
             then("the response mustn't be null") {
@@ -40,8 +42,24 @@ class CreateAccount : BehaviorSpec( {
             }
 
             then("the returned account object should have status deleted") {
-                account!!.status shouldBe AccountStatus.Deleted
+                account.status shouldBe AccountStatus.Deleted
                 account.createdAt shouldBe account.modifiedAt
+            }
+        }
+
+        `when`("$prefix - I call POST /api/v1/admin/accounts with an invalid account status") {
+            val call = testEngine.handleRequest(HttpMethod.Post, "/api/v1/admin/accounts") {
+                setBody(
+                    "{" +
+                            "    \"accountUUID\": \"${UUID.randomUUID()}\",\n" +
+                            "    \"status\": \"NotActive\"\n" +
+                            "}"
+                )
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            }
+
+            then("the response status should be HTTP 400 BadRequest") {
+                call.response.status() shouldBe HttpStatusCode.BadRequest
             }
         }
     }

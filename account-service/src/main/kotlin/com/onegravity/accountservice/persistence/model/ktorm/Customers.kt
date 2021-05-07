@@ -1,6 +1,7 @@
-package com.onegravity.accountservice.persistence.model.customer
+package com.onegravity.accountservice.persistence.model.ktorm
 
-import com.onegravity.accountservice.persistence.model.account.Accounts
+import com.onegravity.accountservice.persistence.model.CustomerStatus
+import com.onegravity.accountservice.persistence.model.Language
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
 import org.ktorm.schema.timestamp

@@ -1,7 +1,7 @@
-package com.onegravity.accountservice.persistence.model.customer
+package com.onegravity.accountservice.persistence.model.ktorm
 
+import com.onegravity.accountservice.persistence.model.CustomerStatus
 import com.onegravity.accountservice.persistence.model.Dao
-import com.onegravity.accountservice.persistence.model.account.AccountDao
 import com.onegravity.accountservice.route.model.customer.CreateCustomer
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.route.model.customer.UpdateCustomer
@@ -13,7 +13,7 @@ import java.time.Instant
 import java.util.*
 
 class CustomerDao(private val accountDao: AccountDao, private val database: Database) :
-    Dao<Customer, ResponseCustomer, CreateCustomer, UpdateCustomer> {
+    Dao<ResponseCustomer, CreateCustomer, UpdateCustomer> {
 
     override fun getAll() = database
         .sequenceOf(Customers)
@@ -21,48 +21,52 @@ class CustomerDao(private val accountDao: AccountDao, private val database: Data
         .map { toObject(it) }
 
     override fun get(uuid: String) = database.sequenceOf(Customers)
-        .firstOrNull { it.customerUUID eq uuid }
+        .firstOrNull { Customers.customerUUID eq uuid }
         ?.let { toObject(it) }
         ?: throw NotFoundException("Customer with uuid $uuid not found")
 
-    override fun insert(customer: CreateCustomer): ResponseCustomer {
+    override fun insert(`object`: CreateCustomer): ResponseCustomer {
         val newCustomer = Customer {
             val now = Instant.now()
             customerUUID = UUID.randomUUID().toString()
             createdAt = now
             modifiedAt = now
-            firstName = customer.firstName
-            lastName = customer.lastName
-            language = customer.language
-            status = customer.status
-            account = accountDao.getAccount(customer.accountUUID)
+            firstName = `object`.firstName
+            lastName = `object`.lastName
+            language = `object`.language
+            status = `object`.status
+            account = accountDao.getAccount(`object`.accountUUID)
         }
         database.sequenceOf(Customers).add(newCustomer)
         return get(newCustomer.customerUUID)
     }
 
-    override fun update(customer: UpdateCustomer): ResponseCustomer {
+    override fun update(`object`: UpdateCustomer): ResponseCustomer {
         database.sequenceOf(Customers)
-            .firstOrNull { it.customerUUID eq customer.customerUUID }
+            .firstOrNull { Customers.customerUUID eq `object`.customerUUID }
             ?.apply {
+                `object`.firstName?.run { firstName = this }
+                `object`.lastName?.run { lastName = this }
+                `object`.status?.run { status = this }
+                `object`.language?.run { language = this }
                 modifiedAt = Instant.now()
-                customer.firstName?.run { firstName = this }
-                customer.lastName?.run { lastName = this }
-                customer.status?.run { status = this }
-                customer.language?.run { language = this }
                 flushChanges()
             }
-        return get(customer.customerUUID)
+        return get(`object`.customerUUID)
     }
 
     override fun delete(uuid: String): ResponseCustomer {
         database.sequenceOf(Customers)
-            .firstOrNull { it.customerUUID eq uuid }
-            ?.delete()
+            .firstOrNull { Customers.customerUUID eq uuid }
+            ?.apply {
+                status = CustomerStatus.Deleted
+                modifiedAt = Instant.now()
+                flushChanges()
+            }
         return get(uuid)
     }
 
-    override fun toObject(entity: Customer) = entity.run {
+    private fun toObject(entity: Customer) = entity.run {
         ResponseCustomer(
             customerUUID,
             createdAt,

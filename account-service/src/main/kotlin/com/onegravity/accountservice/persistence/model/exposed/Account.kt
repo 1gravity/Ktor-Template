@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.persistence.exposed.model.account
+package com.onegravity.accountservice.persistence.model.exposed
 
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass

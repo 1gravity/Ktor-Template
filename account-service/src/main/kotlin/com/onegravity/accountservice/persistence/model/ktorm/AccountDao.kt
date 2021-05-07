@@ -1,5 +1,6 @@
-package com.onegravity.accountservice.persistence.model.account
+package com.onegravity.accountservice.persistence.model.ktorm
 
+import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.persistence.model.Dao
 import com.onegravity.accountservice.route.model.account.CreateAccount
 import com.onegravity.accountservice.route.model.account.ResponseAccount
@@ -14,7 +15,7 @@ import org.ktorm.entity.toList
 import java.time.Instant
 import java.util.*
 
-class AccountDao(private val database: Database) : Dao<Account, ResponseAccount, CreateAccount, UpdateAccount> {
+class AccountDao(private val database: Database) : Dao<ResponseAccount, CreateAccount, UpdateAccount> {
 
     override fun getAll() = database
         .sequenceOf(Accounts)
@@ -22,40 +23,35 @@ class AccountDao(private val database: Database) : Dao<Account, ResponseAccount,
         .map { toObject(it) }
 
     @Throws(NotFoundException::class)
-    fun getAccount(uuid: String) = database.sequenceOf(Accounts)
-        .firstOrNull { it.accountUUID eq uuid }
-        ?: throw NotFoundException("Account with uuid $uuid not found")
-
-    @Throws(NotFoundException::class)
     override fun get(uuid: String) = toObject(getAccount(uuid))
 
-    override fun insert(account: CreateAccount): ResponseAccount {
+    override fun insert(`object`: CreateAccount): ResponseAccount {
         val newAccount = Account {
             val now = Instant.now()
             accountUUID = UUID.randomUUID().toString()
             createdAt = now
             modifiedAt = now
-            status = account.status
+            status = `object`.status
         }
         database.sequenceOf(Accounts).add(newAccount)
         // if we return newAccount / PersistentAccount the time format will be different than what we store in the db
         return get(newAccount.accountUUID)
     }
 
-    override fun update(account: UpdateAccount): ResponseAccount {
+    override fun update(`object`: UpdateAccount): ResponseAccount {
         database.sequenceOf(Accounts)
-            .firstOrNull { it.accountUUID eq account.accountUUID }
+            .firstOrNull { Accounts.accountUUID eq `object`.accountUUID }
             ?.apply {
-                account.status?.run { status = this }
+                `object`.status?.run { status = this }
                 modifiedAt = Instant.now()
                 flushChanges()
             }
-        return get(account.accountUUID)
+        return get(`object`.accountUUID)
     }
 
     override fun delete(uuid: String): ResponseAccount {
         database.sequenceOf(Accounts)
-            .firstOrNull { it.accountUUID eq uuid }
+            .firstOrNull { Accounts.accountUUID eq uuid }
             ?.apply {
                 status = AccountStatus.Deleted
                 modifiedAt = Instant.now()
@@ -64,7 +60,12 @@ class AccountDao(private val database: Database) : Dao<Account, ResponseAccount,
         return get(uuid)
     }
 
-    override fun toObject(entity: Account) = entity.run {
+    @Throws(NotFoundException::class)
+    fun getAccount(uuid: String) = database.sequenceOf(Accounts)
+        .firstOrNull { Accounts.accountUUID eq uuid }
+        ?: throw NotFoundException("Account with uuid $uuid not found")
+
+    fun toObject(entity: Account) = entity.run {
         ResponseAccount(accountUUID, createdAt, modifiedAt, status)
     }
 

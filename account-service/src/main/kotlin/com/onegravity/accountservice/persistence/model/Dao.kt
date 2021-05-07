@@ -2,7 +2,7 @@ package com.onegravity.accountservice.persistence.model
 
 import com.onegravity.accountservice.util.NotFoundException
 
-interface Dao<ENTITY, OBJECT, INSERT, UPDATE> {
+interface Dao<OBJECT, INSERT, UPDATE> {
 
     fun getAll(): List<OBJECT>
 
@@ -17,7 +17,5 @@ interface Dao<ENTITY, OBJECT, INSERT, UPDATE> {
 
     @Throws(NotFoundException::class)
     fun delete(uuid: String): OBJECT
-
-    fun toObject(entity: ENTITY): OBJECT
 
 }
