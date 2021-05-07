@@ -1,9 +1,15 @@
 package com.onegravity.accountservice.application
 
+import com.google.gson.GsonBuilder
+import com.onegravity.accountservice.controller.adapters.AccountStatusAdapter
+import com.onegravity.accountservice.controller.adapters.CustomerStatusAdapter
 import com.onegravity.accountservice.controller.adapters.GsonInstantAdapter
+import com.onegravity.accountservice.controller.adapters.LanguageAdapter
 import com.onegravity.accountservice.controller.controllerModule
 import com.onegravity.accountservice.persistence.databaseModule
-import com.onegravity.accountservice.persistence.repository.repositoryModule
+import com.onegravity.accountservice.persistence.model.AccountStatus
+import com.onegravity.accountservice.persistence.model.CustomerStatus
+import com.onegravity.accountservice.persistence.model.Language
 import com.onegravity.accountservice.route.accountRouting
 import com.onegravity.accountservice.route.customerRouting
 import com.onegravity.accountservice.route.healthRouting
@@ -13,6 +19,7 @@ import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.http.*
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import java.time.Instant
 import io.ktor.server.netty.EngineMain as NettyEngine
@@ -30,11 +37,11 @@ fun Application.mainModule() {
     startKoin {
         modules(
             applicationModule(environment),
-            databaseModule(environment),
             controllerModule,
-            repositoryModule
         )
     }
+    // load the database module separately because it needs the other modules (configuration)
+    loadKoinModules(databaseModule(environment))
 
     // some default headers
     install(DefaultHeaders) {
@@ -45,11 +52,7 @@ fun Application.mainModule() {
     }
 
     install(ContentNegotiation) {
-        gson {
-            setPrettyPrinting()
-            disableHtmlEscaping()
-            registerTypeAdapter(Instant::class.java, GsonInstantAdapter)
-        }
+        gson { configureGson(this) }
     }
 
     // default error responses
@@ -67,5 +70,16 @@ fun Application.mainModule() {
     if (environment.developmentMode) {
         // log all calls to this service
         install(CallLogging)
+    }
+}
+
+fun configureGson(builder: GsonBuilder) {
+    with(builder) {
+        setPrettyPrinting()
+        disableHtmlEscaping()
+        registerTypeAdapter(Instant::class.java, GsonInstantAdapter)
+        registerTypeAdapter(AccountStatus::class.java, AccountStatusAdapter)
+        registerTypeAdapter(CustomerStatus::class.java, CustomerStatusAdapter)
+        registerTypeAdapter(Language::class.java, LanguageAdapter)
     }
 }

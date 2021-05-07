@@ -1,10 +1,7 @@
 package com.onegravity.accountservice.api
 
-import com.onegravity.accountservice.route.response.ServiceStatus
-import com.onegravity.accountservice.util.Config
-import com.onegravity.accountservice.util.getKoinInstance
-import com.onegravity.accountservice.util.gson
-import com.onegravity.accountservice.util.testApplication
+import com.onegravity.accountservice.route.model.ServiceStatus
+import com.onegravity.accountservice.util.*
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -17,7 +14,7 @@ import io.ktor.server.testing.*
 @Suppress("unused")
 class HealthTest : BehaviorSpec({
     // GET /status
-    testApplication { testEngine ->
+    testApp(this) { testEngine, _ ->
         val config = getKoinInstance<Config>()
 
         `when`("I call GET /status") {

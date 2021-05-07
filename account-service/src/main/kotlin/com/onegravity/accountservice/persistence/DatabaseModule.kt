@@ -1,13 +1,23 @@
 package com.onegravity.accountservice.persistence
 
-import com.onegravity.accountservice.persistence.database.Database
-import com.onegravity.accountservice.persistence.database.DatabaseImpl
+import com.onegravity.accountservice.persistence.model.DaoProvider
+import com.onegravity.accountservice.persistence.model.exposed.ExposedDaoProvider
+import com.onegravity.accountservice.persistence.model.ktorm.KtormDaoProvider
+import com.onegravity.accountservice.util.DatabaseConfigImpl
 import io.ktor.application.*
 import org.ktorm.logging.LogLevel
 import org.koin.dsl.module as KoinModule
 
+@Suppress("MoveVariableDeclarationIntoWhen")
 fun databaseModule(environment: ApplicationEnvironment) =
     KoinModule {
         val logLevel = if (environment.developmentMode) LogLevel.TRACE else LogLevel.WARN
-        single<Database> { DatabaseImpl(logLevel) }
+
+        val orm = environment.config.propertyOrNull("ktor.database.orm")?.getString()
+        val daoProvider = when (orm) {
+            "EXPOSED" -> ExposedDaoProvider(DatabaseConfigImpl)
+            else -> KtormDaoProvider(DatabaseConfigImpl, logLevel)
+        }
+
+        single<DaoProvider> { daoProvider }
     }

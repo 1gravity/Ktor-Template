@@ -8,6 +8,7 @@ object Dependency {
 
     private const val postgresVersion = "42.2.20"
     private const val ktormVersion = "3.3.0"
+    private const val exposedVersion = "0.17.13"
     private const val flywayVersion = "7.7.1"
     private const val hikariCPVersion = "4.0.3"
 
@@ -37,10 +38,14 @@ object Dependency {
         // GSON Serialization / Deserialization
         "io.ktor:ktor-gson:$ktorVersion",
 
+        // Postgres
+        "org.postgresql:postgresql:$postgresVersion",
         // Ktorm (ORM)
         "org.ktorm:ktorm-core:$ktormVersion",
         "org.ktorm:ktorm-support-postgresql:$ktormVersion",
         "org.ktorm:ktorm-jackson:$ktormVersion",
+        // Exposed (ORM)
+        "org.jetbrains.exposed:exposed:$exposedVersion",
         // HikariCP (Connection Pooling)
         "com.zaxxer:HikariCP:$hikariCPVersion",
         // Flyway (DB migration)
@@ -56,10 +61,7 @@ object Dependency {
         "ch.qos.logback:logback-classic:$logbackVersion"
     )
 
-    val runtime = listOf(
-        // Postgres
-        "org.postgresql:postgresql:$postgresVersion"
-    )
+    val runtime = emptyList<String>()
 
     val testImplementation = listOf(
         "io.ktor:ktor-server-tests:$ktorVersion",

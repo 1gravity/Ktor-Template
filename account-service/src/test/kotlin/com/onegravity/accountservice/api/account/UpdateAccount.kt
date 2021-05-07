@@ -1,10 +1,10 @@
 package com.onegravity.accountservice.api.account
 
 import com.github.michaelbull.result.runCatching
-import com.onegravity.accountservice.persistence.model.account.AccountStatus
-import com.onegravity.accountservice.route.response.ResponseAccount as Account
+import com.onegravity.accountservice.persistence.model.AccountStatus
+import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.util.gson
-import com.onegravity.accountservice.util.testApplication
+import com.onegravity.accountservice.util.testApps
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -12,14 +12,15 @@ import io.kotest.matchers.shouldNotBe
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import java.time.Instant
+import kotlin.test.assertNotNull
 
 @Suppress("unused")
 class UpdateAccount : BehaviorSpec( {
-    testApplication { testEngine ->
+    testApps(this) { testEngine, prefix ->
         val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
 
-        `when`("I call PUT /api/v1/admin/accounts/{accountUUID}") {
-            val (updatedAccount, status) = updateAccount(testEngine, newAccount!!)
+        `when`("$prefix - I call PUT /api/v1/admin/accounts") {
+            val (updatedAccount, status) = updateAccount(testEngine, newAccount)
 
             then("the updated account should not be null") {
                 updatedAccount shouldNotBe null
@@ -30,20 +31,20 @@ class UpdateAccount : BehaviorSpec( {
             }
 
             then("the response body should the same as the original account") {
-                newAccount.accountUUID shouldBe updatedAccount!!.accountUUID
+                newAccount.accountUUID shouldBe updatedAccount.accountUUID
                 newAccount.status shouldBe updatedAccount.status
                 newAccount.createdAt shouldBe updatedAccount.createdAt
             }
 
             then("the modified timestamp should have changed") {
-                newAccount.modifiedAt shouldBeLessThan updatedAccount!!.modifiedAt
+                newAccount.modifiedAt shouldBeLessThan updatedAccount.modifiedAt
                 updatedAccount.createdAt shouldBeLessThan updatedAccount.modifiedAt
             }
         }
 
-        val account2Update = Account(newAccount!!.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
+        val account2Update = ResponseAccount(newAccount.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
 
-        `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with updated fields") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts with updated fields") {
             val (updatedAccount, status) = updateAccount(testEngine, account2Update)
 
             then("the updated account should not be null") {
@@ -55,23 +56,24 @@ class UpdateAccount : BehaviorSpec( {
             }
 
             then("accountUUID and createdAt should not have changed") {
-                newAccount.accountUUID shouldBe updatedAccount!!.accountUUID
+                newAccount.accountUUID shouldBe updatedAccount.accountUUID
                 newAccount.createdAt shouldBe updatedAccount.createdAt
             }
 
             then("the modified timestamp should have changed") {
-                newAccount.modifiedAt shouldBeLessThan updatedAccount!!.modifiedAt
+                newAccount.modifiedAt shouldBeLessThan updatedAccount.modifiedAt
                 updatedAccount.createdAt shouldBeLessThan updatedAccount.modifiedAt
             }
 
             then("the status should have changed") {
-                account2Update.status shouldBe updatedAccount!!.status
+                account2Update.status shouldBe updatedAccount.status
             }
         }
 
-        `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with an invalid uuid") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/123456") {
-                setBody(gson.toJson(account2Update))
+        `when`("$prefix - I call PUT /api/v1/admin/accounts with an invalid uuid") {
+            val account = ResponseAccount("123456", Instant.now(), Instant.now(), AccountStatus.Blocked)
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+                setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
 
@@ -80,9 +82,10 @@ class UpdateAccount : BehaviorSpec( {
             }
         }
 
-        `when`("I call PUT /api/v1/admin/accounts/{accountUUID} with a non existing uuid") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/00000000-0000-0000-0000-000000000000") {
-                setBody(gson.toJson(account2Update))
+        `when`("$prefix - I call PUT /api/v1/admin/accounts with a non existing uuid") {
+            val account = ResponseAccount("00000000-0000-0000-0000-000000000000", Instant.now(), Instant.now(), AccountStatus.Blocked)
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+                setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
 
@@ -90,17 +93,35 @@ class UpdateAccount : BehaviorSpec( {
                 call.response.status() shouldBe HttpStatusCode.NotFound
             }
         }
+
+        `when`("$prefix - I call PUT /api/v1/admin/accounts with an invalid account status") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+                setBody("{" +
+                        "    \"accountUUID\": \"${newAccount.accountUUID}\",\n" +
+                        "    \"status\": \"NotActive\"\n" +
+                        "}"
+                )
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            }
+
+            then("the response status should be HTTP 400 BadRequest") {
+                call.response.status() shouldBe HttpStatusCode.BadRequest
+            }
+        }
     }
 } )
 
-fun updateAccount(testEngine: TestApplicationEngine, account: Account): Pair<Account?, HttpStatusCode> {
-    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/${account.accountUUID}") {
+fun updateAccount(testEngine: TestApplicationEngine, account: ResponseAccount): Pair<ResponseAccount, HttpStatusCode> {
+    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
         setBody(gson.toJson(account))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
     }
 
     val result = runCatching {
-        gson.fromJson(call.response.content.toString(), Account::class.java)
+        gson.fromJson(call.response.content.toString(), ResponseAccount::class.java)
     }
-    return Pair(result.component1(), call.response.status() ?: HttpStatusCode.InternalServerError)
+
+    val responseAccount = result.component1()
+    assertNotNull(responseAccount)
+    return Pair(responseAccount, call.response.status() ?: HttpStatusCode.InternalServerError)
 }

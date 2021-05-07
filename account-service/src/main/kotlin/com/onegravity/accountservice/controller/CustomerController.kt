@@ -1,7 +1,8 @@
 package com.onegravity.accountservice.controller
 
-import com.onegravity.accountservice.route.response.ResponseCustomer
-import com.onegravity.accountservice.route.request.RequestCustomer
+import com.onegravity.accountservice.route.model.customer.CreateCustomer
+import com.onegravity.accountservice.route.model.customer.ResponseCustomer
+import com.onegravity.accountservice.route.model.customer.UpdateCustomer
 import com.onegravity.accountservice.util.NotFoundException
 
 interface CustomerController {
@@ -12,10 +13,10 @@ interface CustomerController {
     suspend fun getCustomer(customerUUID: String): ResponseCustomer
 
     @Throws(NotFoundException::class)
-    suspend fun createCustomer(accountUUID: String, customer: RequestCustomer): ResponseCustomer
+    suspend fun createCustomer(customer: CreateCustomer): ResponseCustomer
 
     @Throws(NotFoundException::class)
-    suspend fun updateCustomer(customerUUID: String, customer: RequestCustomer): ResponseCustomer
+    suspend fun updateCustomer(customer: UpdateCustomer): ResponseCustomer
 
     @Throws(NotFoundException::class)
     suspend fun deleteCustomer(customerUUID: String): ResponseCustomer

@@ -2,11 +2,11 @@ package com.onegravity.accountservice.api.customer
 
 import com.github.michaelbull.result.runCatching
 import com.onegravity.accountservice.api.account.verifyAccount
-import com.onegravity.accountservice.persistence.model.customer.CustomerStatus
-import com.onegravity.accountservice.persistence.model.customer.Language
-import com.onegravity.accountservice.route.request.uuidPattern
-import com.onegravity.accountservice.route.response.ResponseAccount as Account
-import com.onegravity.accountservice.route.response.ResponseCustomer as Customer
+import com.onegravity.accountservice.persistence.model.CustomerStatus
+import com.onegravity.accountservice.persistence.model.Language
+import com.onegravity.accountservice.route.misc.uuidPattern
+import com.onegravity.accountservice.route.model.account.ResponseAccount
+import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.util.gson
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldHaveLengthBetween
@@ -15,28 +15,31 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import java.time.Instant
 import java.util.*
+import kotlin.test.assertNotNull
 
-fun createCustomer(testEngine: TestApplicationEngine, account: Account, status: CustomerStatus): Pair<Customer?, HttpStatusCode> {
+fun createCustomer(testEngine: TestApplicationEngine, account: ResponseAccount, status: CustomerStatus): Pair<ResponseCustomer, HttpStatusCode> {
     val uuid = UUID.randomUUID().toString()
     val now = Instant.now()
-    val customer = Customer(uuid, now, now, status, "Tom", "Sawyer", Language.en, account)
-    return createCustomer(testEngine, account.accountUUID, customer)
+    val customer = TestCustomer(uuid, now, now, status, "Tom", "Sawyer", Language.en, account.accountUUID)
+    return createCustomer(testEngine, customer)
 }
 
-fun createCustomer(testEngine: TestApplicationEngine, accountUUID: String, customer: Customer): Pair<Customer?, HttpStatusCode> {
-    val call = testEngine.handleRequest(HttpMethod.Post, "/api/v1/admin/customers/${accountUUID}") {
+fun createCustomer(testEngine: TestApplicationEngine, customer: TestCustomer): Pair<ResponseCustomer, HttpStatusCode> {
+    val call = testEngine.handleRequest(HttpMethod.Post, "/api/v1/admin/customers") {
         setBody(gson.toJson(customer))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
     }
 
     val result = runCatching {
-        gson.fromJson(call.response.content.toString(), Customer::class.java)
+        gson.fromJson(call.response.content.toString(), ResponseCustomer::class.java)
     }
 
-    return Pair(result.component1(), call.response.status() ?: HttpStatusCode.InternalServerError)
+    val responseCustomer = result.component1()
+    assertNotNull(responseCustomer)
+    return Pair(responseCustomer, call.response.status() ?: HttpStatusCode.InternalServerError)
 }
 
-fun verifyCustomer(customer: Customer) {
+fun verifyCustomer(customer: ResponseCustomer) {
     with (customer) {
         customerUUID shouldNotBe null
         createdAt shouldNotBe null
