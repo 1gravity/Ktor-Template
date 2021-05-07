@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.persistence.database
+package com.onegravity.accountservice.persistence
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

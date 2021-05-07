@@ -1,13 +1,15 @@
+@file:Suppress("unused")
+
 package com.onegravity.accountservice.util
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-inline fun <reified T> getKoinInstance(): T {
-    return object : KoinComponent {
+inline fun <reified T> getKoinInstance() =
+    object : KoinComponent {
         val value: T by inject()
     }.value
-}
+
 
 inline fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
     return if (p1 != null && p2 != null) block(p1, p2) else null

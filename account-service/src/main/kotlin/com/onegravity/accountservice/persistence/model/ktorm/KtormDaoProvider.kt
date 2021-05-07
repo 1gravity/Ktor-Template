@@ -2,8 +2,8 @@ package com.onegravity.accountservice.persistence.model.ktorm
 
 import com.onegravity.accountservice.persistence.model.DaoProvider
 import com.onegravity.accountservice.util.DatabaseConfig
-import com.onegravity.accountservice.persistence.database.dataSource
-import com.onegravity.accountservice.persistence.database.migrate
+import com.onegravity.accountservice.persistence.dataSource
+import com.onegravity.accountservice.persistence.migrate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.ktorm.logging.ConsoleLogger
