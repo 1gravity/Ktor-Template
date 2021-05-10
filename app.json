@@ -1,0 +1,6 @@
+{
+  "name": "Ktor Template",
+  "description": "A bare-bones Ktor app, which can easily be deployed to Heroku.",
+  "image": "heroku/gradle",
+  "addons": [ "heroku-postgresql" ]
+}
