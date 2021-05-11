@@ -1,10 +1,15 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.onegravity.accountservice.util
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.onegravity.accountservice.application.applicationModule
 import com.onegravity.accountservice.application.configureGson
 import com.onegravity.accountservice.application.mainModule
+import com.onegravity.accountservice.controller.controllerModule
 import com.onegravity.accountservice.persistence.model.DaoProvider
+import com.onegravity.accountservice.persistence.model.exposed.ExposedDaoProvider
 import com.onegravity.accountservice.persistence.model.ktorm.KtormDaoProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.GivenScope
@@ -14,9 +19,28 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.core.context.GlobalContext.loadKoinModules
 import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.ktorm.logging.LogLevel
-import io.ktor.server.testing.withTestApplication as ktorWithTestApplication
+import io.ktor.server.testing.withTestApplication
+
+private fun Application.ktormApp() { mainModule {
+    testDI(environment) { KtormDaoProvider(TestDatabaseConfigImpl) }
+} }
+
+private fun Application.exposeApp() { mainModule {
+    testDI(environment) { ExposedDaoProvider(TestDatabaseConfigImpl) }
+} }
+
+fun testDI(environment: ApplicationEnvironment, getProvider: () -> DaoProvider) {
+    startKoin {
+        modules(applicationModule(environment))
+    }
+    // there's a dependency between these two modules so we need to load them sequentially
+    loadKoinModules(module {
+        single(override = true) { getProvider() }
+    })
+    loadKoinModules(controllerModule)
+}
 
 /**
  * Run the tests with both Ktorm and Exposed.
@@ -25,8 +49,8 @@ fun testApps(
     spec: BehaviorSpec,
     test: suspend GivenScope.(TestApplicationEngine, prefix: String) -> Unit
 ) {
-    testAppWithKtorm(spec, test)
-    testAppWithExposed(spec, test)
+    testApp( { ktormApp() }, "ktorm", spec, test)
+    testApp( { exposeApp() }, "exposed", spec, test)
 }
 
 /**
@@ -36,69 +60,25 @@ fun testApp(
     spec: BehaviorSpec,
     test: suspend GivenScope.(TestApplicationEngine, prefix: String) -> Unit
 ) {
-    testAppWithKtorm(spec, test)
+    testApp( { ktormApp() }, "ktorm", spec, test)
 }
 
-private fun testAppWithKtorm(
+private fun testApp(
+    app: Application.() -> Unit,
+    name: String,
     spec: BehaviorSpec,
     test: suspend GivenScope.(TestApplicationEngine, prefix: String) -> Unit
 ) {
-    @OptIn(ExperimentalSerializationApi::class)
-    val ktormApp: Application.() -> Unit = {
-        mainModule().also {
-            loadKoinModules(
-                module {
-                    single<DaoProvider>(override = true) { KtormDaoProvider(TestDatabaseConfigImpl, LogLevel.DEBUG) }
-                }
-            )
-        }
-    }
-
-    spec.given("ktorm test application container") {
-        withTestApplication(
-            application = ktormApp,
-            runTests = { this@given.test(this@withTestApplication, "ktorm") }
-        )
-    }
-}
-
-private fun testAppWithExposed(
-    spec: BehaviorSpec,
-    test: suspend GivenScope.(TestApplicationEngine, prefix: String) -> Unit
-) {
-    @OptIn(ExperimentalSerializationApi::class)
-    val exposedApp: Application.() -> Unit = {
-        mainModule().also {
-            loadKoinModules(
-                module {
-                    single<DaoProvider>(override = true) { KtormDaoProvider(TestDatabaseConfigImpl, LogLevel.DEBUG) }
-                }
-            )
-        }
-    }
-
-    spec.given("exposed test application container") {
-        withTestApplication(
-            application = exposedApp,
-            runTests = { this@given.test(this@withTestApplication, "exposed") }
-        )
-    }
-}
-
-@Suppress("BlockingMethodInNonBlockingContext")
-private fun withTestApplication(
-    application: Application.() -> Unit,
-    runTests: suspend TestApplicationEngine.() -> Unit
-) {
-    ktorWithTestApplication(application) {
-        runBlocking {
-            // runTests is the same as runTests(this@ktorWithTestApplication)
-            runTests()
-            stopKoin()
+    spec.given("$name test application container") {
+        withTestApplication(app) {
+            runBlocking {
+                test(this@withTestApplication, name)
+                stopKoin()
+            }
         }
     }
 }
 
- val gson: Gson = GsonBuilder()
+val gson: Gson = GsonBuilder()
     .apply { configureGson(this) }
     .create()

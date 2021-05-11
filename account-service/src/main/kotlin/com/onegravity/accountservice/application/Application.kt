@@ -26,22 +26,25 @@ import io.ktor.server.netty.EngineMain as NettyEngine
 
 fun main(args: Array<String>) = NettyEngine.main(args)
 
+@OptIn(ExperimentalSerializationApi::class)
+val defaultDI = fun(environment: ApplicationEnvironment) {
+    startKoin {
+        modules(applicationModule(environment))
+    }
+    // there's a dependency between these two modules so we need to load them sequentially
+    loadKoinModules(databaseModule(environment))
+    loadKoinModules(controllerModule)
+}
+
 /**
  * The main entry point into the app (mainModule is configured in application.conf).
  */
 @Suppress("unused") // Referenced in application.conf
 @ExperimentalStdlibApi
 @ExperimentalSerializationApi
-fun Application.mainModule() {
+fun Application.mainModule(di: (environment: ApplicationEnvironment) -> Unit = defaultDI) {
     // setup dependency injection
-    startKoin {
-        modules(
-            applicationModule(environment),
-            controllerModule,
-        )
-    }
-    // load the database module separately because it needs the other modules (configuration)
-    loadKoinModules(databaseModule(environment))
+    di(environment)
 
     // some default headers
     install(DefaultHeaders) {
