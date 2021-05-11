@@ -46,6 +46,6 @@ tasks {
 }
 
 tasks.register("stage") {
-    dependsOn("build", "clean")
+    dependsOn("assemble", "clean")
     mustRunAfter("clean")
 }
