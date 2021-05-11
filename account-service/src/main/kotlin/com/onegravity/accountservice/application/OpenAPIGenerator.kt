@@ -33,7 +33,8 @@ fun Application.openAPIGenerator() {
         val protocol = config.getProperty("ktor.openapi.protocol")
         val host = config.getProperty("ktor.openapi.host")
         val port = config.getProperty("ktor.openapi.port")
-        server("$protocol://$host:$port") {
+        val portString = if (port != null) ":$port" else ""
+        server("$protocol://$host$portString") {
             description = serviceName
         }
 
