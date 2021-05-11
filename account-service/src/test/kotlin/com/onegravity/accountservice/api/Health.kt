@@ -2,6 +2,7 @@ package com.onegravity.accountservice.api
 
 import com.onegravity.accountservice.route.model.ServiceStatus
 import com.onegravity.accountservice.util.*
+import com.onegravity.accountservice.util.Config
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

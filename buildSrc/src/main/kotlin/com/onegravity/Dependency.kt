@@ -15,6 +15,7 @@ object Dependency {
     private const val openApiGenVersion = "0.2-beta.17"
     private const val kotlinResultVersion = "1.1.11"
     private const val logbackVersion = "1.2.3"
+    private const val dotenvVersion = "6.2.2"
 
     private const val kotestVersion = "4.4.3"
     private const val testcontainersVersion = "1.15.3"
@@ -56,6 +57,7 @@ object Dependency {
 
         // Miscellaneous
         "com.michael-bull.kotlin-result:kotlin-result:$kotlinResultVersion",
+        "io.github.cdimascio:dotenv-kotlin:$dotenvVersion",
 
         // Logging
         "ch.qos.logback:logback-classic:$logbackVersion"

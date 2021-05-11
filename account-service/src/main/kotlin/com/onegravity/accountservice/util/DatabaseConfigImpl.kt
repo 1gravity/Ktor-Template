@@ -9,14 +9,14 @@ object DatabaseConfigImpl : DatabaseConfig, KoinComponent {
 
     // e.g. "jdbc:postgresql://localhost:5432/account"
     override val url = "jdbc:postgresql://" +
-            config.getPropertyOrThrow("ktor.database.host") + ":" +
-            config.getPropertyOrThrow("ktor.database.port") + "/" +
-            config.getPropertyOrThrow("ktor.database.name")
+            config.getPropertyOrThrow("DB_HOST") + ":" +
+            config.getPropertyOrThrow("DB_PORT") + "/" +
+            config.getPropertyOrThrow("DB_NAME")
 
     override val driver = config.getPropertyOrThrow("ktor.database.driver")
 
-    override val userName = config.getPropertyOrThrow("ktor.database.user")
+    override val userName = config.getPropertyOrThrow("DB_USER")
 
-    override val password = config.getPropertyOrThrow("ktor.database.password")
+    override val password = config.getPropertyOrThrow("DB_PASSWORD")
 
 }
