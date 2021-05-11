@@ -5,7 +5,9 @@ import io.ktor.config.*
 
 class ConfigImpl(private val config: ApplicationConfig) : Config {
 
-    private val dotenv = dotenv()
+    private val dotenv = dotenv {
+        ignoreIfMissing = true
+    }
 
     override fun getProperty(key: String, default: String): String =
         dotenv.get(key, config.propertyOrNull(key)?.getString() ?: default)
