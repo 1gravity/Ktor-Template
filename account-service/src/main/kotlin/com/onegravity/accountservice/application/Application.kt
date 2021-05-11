@@ -48,6 +48,7 @@ fun Application.mainModule(di: (environment: ApplicationEnvironment) -> Unit = d
 
     // some default headers
     install(DefaultHeaders) {
+        header(HttpHeaders.AccessControlAllowOrigin, "*")
         header(HttpHeaders.Server, "N/A for security reasons")
         header(HttpHeaders.CacheControl, "no-cache, no-store, must-revalidate")
         header(HttpHeaders.Pragma, "no-cache")

@@ -30,9 +30,9 @@ fun Application.openAPIGenerator() {
             }
         }
 
-        val protocol = config.getProperty("ktor.deployment.protocol")
-        val host = config.getProperty("ktor.deployment.host")
-        val port = config.getProperty("ktor.deployment.port")
+        val protocol = config.getProperty("ktor.openapi.protocol")
+        val host = config.getProperty("ktor.openapi.host")
+        val port = config.getProperty("ktor.openapi.port")
         server("$protocol://$host:$port") {
             description = serviceName
         }
