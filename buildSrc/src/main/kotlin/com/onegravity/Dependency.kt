@@ -20,63 +20,71 @@ object Dependency {
     private const val kotestVersion = "4.4.3"
     private const val testcontainersVersion = "1.15.3"
 
-    val implementation = listOf(
+    val implementation = mapOf(
         // Ktor Server
-        "io.ktor:ktor-server-core:$ktorVersion",
-        "io.ktor:ktor-server-netty:$ktorVersion",
+        "io.ktor:ktor-server-core" to ktorVersion,
+        "io.ktor:ktor-server-netty" to ktorVersion,
 
         // Monitoring metrics
-        "io.ktor:ktor-metrics:$ktorVersion",
-        "io.ktor:ktor-metrics-micrometer:$ktorVersion",
+        "io.ktor:ktor-metrics" to ktorVersion,
+        "io.ktor:ktor-metrics-micrometer" to ktorVersion,
 
         // Koin / Dependency Injection
-        "io.insert-koin:koin-ktor:$koinVersion",
-        "io.insert-koin:koin-logger-slf4j:$koinVersion",
+        "io.insert-koin:koin-ktor" to koinVersion,
+        "io.insert-koin:koin-logger-slf4j" to koinVersion,
 
         // Kotlinx Serialization / Deserialization
-        "io.ktor:ktor-serialization:$ktorVersion",
-        "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinSerializationVersion",
+        "io.ktor:ktor-serialization" to ktorVersion,
+        "org.jetbrains.kotlinx:kotlinx-serialization-core" to kotlinSerializationVersion,
         // GSON Serialization / Deserialization
-        "io.ktor:ktor-gson:$ktorVersion",
+        "io.ktor:ktor-gson" to ktorVersion,
 
         // Postgres
-        "org.postgresql:postgresql:$postgresVersion",
+        "org.postgresql:postgresql" to postgresVersion,
         // Ktorm (ORM)
-        "org.ktorm:ktorm-core:$ktormVersion",
-        "org.ktorm:ktorm-support-postgresql:$ktormVersion",
-        "org.ktorm:ktorm-jackson:$ktormVersion",
+        "org.ktorm:ktorm-core" to ktormVersion,
+        "org.ktorm:ktorm-support-postgresql" to ktormVersion,
+        "org.ktorm:ktorm-jackson" to ktormVersion,
         // Exposed (ORM)
-        "org.jetbrains.exposed:exposed:$exposedVersion",
+        "org.jetbrains.exposed:exposed" to exposedVersion,
         // HikariCP (Connection Pooling)
-        "com.zaxxer:HikariCP:$hikariCPVersion",
+        "com.zaxxer:HikariCP" to hikariCPVersion,
         // Flyway (DB migration)
-        "org.flywaydb:flyway-core:$flywayVersion",
+        "org.flywaydb:flyway-core" to flywayVersion,
 
         // OpenAPI Generator
-        "com.github.1gravity:Ktor-OpenAPI-Generator:$openApiGenVersion",
+        "com.github.1gravity:Ktor-OpenAPI-Generator" to openApiGenVersion,
 
         // Miscellaneous
-        "com.michael-bull.kotlin-result:kotlin-result:$kotlinResultVersion",
-        "io.github.cdimascio:dotenv-kotlin:$dotenvVersion",
+        "com.michael-bull.kotlin-result:kotlin-result" to kotlinResultVersion,
+        "io.github.cdimascio:dotenv-kotlin" to dotenvVersion,
 
         // Logging
-        "ch.qos.logback:logback-classic:$logbackVersion"
-    )
+        "ch.qos.logback:logback-classic" to logbackVersion
+    ).toStringList()
 
     val runtime = emptyList<String>()
 
-    val testImplementation = listOf(
-        "io.ktor:ktor-server-tests:$ktorVersion",
+    val testImplementation = mapOf(
+        "io.ktor:ktor-server-tests" to ktorVersion,
 
         // Kotest
-        "io.kotest:kotest-runner-junit5:$kotestVersion",
-        "io.kotest:kotest-assertions-core:$kotestVersion",
-        "io.kotest:kotest-property:$kotestVersion",
-        "io.kotest:kotest-assertions-json:$kotestVersion",
+        "io.kotest:kotest-runner-junit5" to kotestVersion,
+        "io.kotest:kotest-assertions-core" to kotestVersion,
+        "io.kotest:kotest-property" to kotestVersion,
+        "io.kotest:kotest-assertions-json" to kotestVersion,
 
         // Testcontainers for Postgres
-        "org.testcontainers:junit-jupiter:$testcontainersVersion",
-        "org.testcontainers:postgresql:$testcontainersVersion"
-    )
+        "org.testcontainers:junit-jupiter" to testcontainersVersion,
+        "org.testcontainers:postgresql" to testcontainersVersion
+    ).toStringList()
+
+    private fun Map<*, *>.toStringList(): List<String> {
+        val result = ArrayList<String>()
+        keys.forEach {
+            result.add("$it:${this[it]}")
+        }
+        return result
+    }
 
 }
