@@ -1,6 +1,6 @@
 package com.onegravity.accountservice.persistence.model
 
-import com.onegravity.accountservice.util.NotFoundException
+import com.onegravity.util.NotFoundException
 
 interface Dao<OBJECT, INSERT, UPDATE> {
 

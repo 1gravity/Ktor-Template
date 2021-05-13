@@ -1,13 +1,14 @@
 package com.onegravity.accountservice.api.customer
 
 import com.github.michaelbull.result.runCatching
+import com.google.gson.Gson
 import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.persistence.model.CustomerStatus
 import com.onegravity.accountservice.persistence.model.Language
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
-import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -20,11 +21,13 @@ import kotlin.test.assertNotNull
 @Suppress("unused")
 class UpdateCustomer : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
+        val gson = getKoinInstance<Gson>()
+
         // create test account
-        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
+        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active, gson)
 
         // create test customer
-        val (newCustomer, _) = createCustomer(testEngine, newAccount, CustomerStatus.Active)
+        val (newCustomer, _) = createCustomer(testEngine, newAccount, CustomerStatus.Active, gson)
         val testCustomer = TestCustomer(
             newCustomer.customerUUID,
             newCustomer.createdAt,
@@ -37,7 +40,7 @@ class UpdateCustomer : BehaviorSpec( {
         )
 
         `when`("$prefix - I call PUT /api/v1/admin/customers") {
-            val (updatedCustomer, status) = updateCustomer(testEngine, testCustomer)
+            val (updatedCustomer, status) = updateCustomer(testEngine, testCustomer, gson)
 
             then("the updated customer should not be null") {
                 updatedCustomer shouldNotBe null
@@ -65,7 +68,7 @@ class UpdateCustomer : BehaviorSpec( {
         val customer2Update = TestCustomer(testCustomer.customerUUID, Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
 
         `when`("$prefix - I call PUT /api/v1/admin/customers with updated fields") {
-            val (updatedCustomer, status) = updateCustomer(testEngine, customer2Update)
+            val (updatedCustomer, status) = updateCustomer(testEngine, customer2Update, gson)
 
             then("the response status should be OK") {
                 status shouldBe HttpStatusCode.OK
@@ -92,7 +95,7 @@ class UpdateCustomer : BehaviorSpec( {
 
         `when`("$prefix - I call PUT /api/v1/admin/customers with an invalid customerUUID") {
             val customer = TestCustomer("123456", Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
-            val (_, status) = updateCustomer(testEngine, customer)
+            val (_, status) = updateCustomer(testEngine, customer, gson)
 
             then("the response status should be HTTP 400 BadRequest") {
                 status shouldBe HttpStatusCode.BadRequest
@@ -101,7 +104,7 @@ class UpdateCustomer : BehaviorSpec( {
 
         `when`("$prefix - I call PUT /api/v1/admin/customers with a non existing customerUUID") {
             val customer = TestCustomer("00000000-0000-0000-0000-000000000000", Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
-            val (_, status) = updateCustomer(testEngine, customer)
+            val (_, status) = updateCustomer(testEngine, customer, gson)
 
             then("the response status should be HTTP 404 NotFound") {
                 status shouldBe HttpStatusCode.NotFound
@@ -140,7 +143,8 @@ class UpdateCustomer : BehaviorSpec( {
     }
 } )
 
-fun updateCustomer(testEngine: TestApplicationEngine, customer: TestCustomer): Pair<ResponseCustomer, HttpStatusCode> {
+fun updateCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gson: Gson):
+        Pair<ResponseCustomer, HttpStatusCode> {
     val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers") {
         setBody(gson.toJson(customer))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())

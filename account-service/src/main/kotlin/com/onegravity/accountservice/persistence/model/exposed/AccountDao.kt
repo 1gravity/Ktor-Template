@@ -5,7 +5,7 @@ import com.onegravity.accountservice.persistence.model.Dao
 import com.onegravity.accountservice.route.model.account.CreateAccount
 import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.route.model.account.UpdateAccount
-import com.onegravity.accountservice.util.NotFoundException
+import com.onegravity.util.NotFoundException
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import java.time.Instant

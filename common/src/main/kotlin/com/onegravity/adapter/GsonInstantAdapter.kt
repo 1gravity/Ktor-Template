@@ -1,11 +1,11 @@
-package com.onegravity.accountservice.controller.adapters
+package com.onegravity.adapter
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.onegravity.accountservice.util.ValidationException
+import com.onegravity.util.ValidationException
 import java.time.Instant
 
 object GsonInstantAdapter: TypeAdapter<Instant>() {

@@ -1,10 +1,11 @@
 package com.onegravity.accountservice.api.account
 
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.route.model.account.ResponseAccount
-import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -14,9 +15,11 @@ import io.ktor.server.testing.*
 @Suppress("unused")
 class GetAccounts : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
+        val gson = getKoinInstance<Gson>()
+
         // create 10 test accounts
         repeat(10) {
-            createAccount(testEngine, AccountStatus.Active)
+            createAccount(testEngine, AccountStatus.Active, gson)
         }
 
         `when`("$prefix - I call GET /api/v1/admin/accounts") {

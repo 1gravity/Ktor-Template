@@ -3,7 +3,7 @@ package com.onegravity.accountservice.controller
 import com.onegravity.accountservice.route.model.customer.CreateCustomer
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.route.model.customer.UpdateCustomer
-import com.onegravity.accountservice.util.NotFoundException
+import com.onegravity.util.NotFoundException
 
 interface CustomerController {
 

@@ -1,5 +1,6 @@
-package com.onegravity.accountservice.util
+package com.onegravity.config
 
+import com.onegravity.config.Config
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -1,5 +1,6 @@
-package com.onegravity.accountservice.util
+package com.onegravity.config
 
+import com.onegravity.config.Config
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.config.*
 

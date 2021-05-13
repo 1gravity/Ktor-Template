@@ -1,11 +1,12 @@
 package com.onegravity.accountservice.api.customer
 
+import com.google.gson.Gson
 import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.persistence.model.CustomerStatus
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
-import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -15,11 +16,13 @@ import io.ktor.server.testing.*
 @Suppress("unused")
 class DeleteCustomer : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
+        val gson = getKoinInstance<Gson>()
+
         // create test account
-        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
+        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active, gson)
 
         // create test customer
-        val (newCustomer, _) = createCustomer(testEngine, newAccount, CustomerStatus.Active)
+        val (newCustomer, _) = createCustomer(testEngine, newAccount, CustomerStatus.Active, gson)
 
         `when`("$prefix - I call DELETE /api/v1/admin/customers/{customerUUID}") {
             val call = testEngine.handleRequest(HttpMethod.Delete, "/api/v1/admin/customers/${newCustomer.customerUUID}")

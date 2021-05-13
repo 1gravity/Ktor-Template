@@ -1,7 +1,9 @@
 package com.onegravity.accountservice.api.account
 
+import com.google.gson.Gson
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -12,8 +14,10 @@ import java.util.*
 @Suppress("unused")
 class CreateAccount : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
+        val gson = getKoinInstance<Gson>()
+
         `when`("$prefix - I call POST /api/v1/admin/accounts") {
-            val (account, status) = createAccount(testEngine, AccountStatus.Active)
+            val (account, status) = createAccount(testEngine, AccountStatus.Active, gson)
 
             then("the response mustn't be null") {
                 account shouldNotBe null
@@ -31,7 +35,7 @@ class CreateAccount : BehaviorSpec( {
         }
 
         `when`("$prefix - I call POST /api/v1/admin/accounts to create a deleted account") {
-            val (account, status) = createAccount(testEngine, AccountStatus.Deleted)
+            val (account, status) = createAccount(testEngine, AccountStatus.Deleted, gson)
 
             then("the response mustn't be null") {
                 account shouldNotBe null

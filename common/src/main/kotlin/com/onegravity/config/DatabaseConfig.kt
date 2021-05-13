@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.util
+package com.onegravity.config
 
 interface DatabaseConfig {
     val url: String

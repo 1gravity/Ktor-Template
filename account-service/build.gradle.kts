@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.onegravity.Dependency
 
-val applicationClass = "com.onegravity.accountservice.application.ApplicationKt"
+val applicationClass = "com.onegravity.accountservice.ApplicationKt"
 
 plugins {
     application
@@ -17,6 +17,8 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     Dependency.implementation.forEach(::implementation)
     Dependency.runtime.forEach(::runtimeOnly)
     Dependency.testImplementation.forEach(::testImplementation)
@@ -24,11 +26,6 @@ dependencies {
 
 application {
     mainClass.set(applicationClass)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {

@@ -1,10 +1,11 @@
 package com.onegravity.accountservice.api.account
 
 import com.github.michaelbull.result.runCatching
+import com.google.gson.Gson
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.route.model.account.ResponseAccount
-import com.onegravity.accountservice.util.gson
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -17,10 +18,12 @@ import kotlin.test.assertNotNull
 @Suppress("unused")
 class UpdateAccount : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
-        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
+        val gson = getKoinInstance<Gson>()
+
+        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active, gson)
 
         `when`("$prefix - I call PUT /api/v1/admin/accounts") {
-            val (updatedAccount, status) = updateAccount(testEngine, newAccount)
+            val (updatedAccount, status) = updateAccount(gson, testEngine, newAccount)
 
             then("the updated account should not be null") {
                 updatedAccount shouldNotBe null
@@ -45,7 +48,7 @@ class UpdateAccount : BehaviorSpec( {
         val account2Update = ResponseAccount(newAccount.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
 
         `when`("$prefix - I call PUT /api/v1/admin/accounts with updated fields") {
-            val (updatedAccount, status) = updateAccount(testEngine, account2Update)
+            val (updatedAccount, status) = updateAccount(gson, testEngine, account2Update)
 
             then("the updated account should not be null") {
                 updatedAccount shouldNotBe null
@@ -111,7 +114,7 @@ class UpdateAccount : BehaviorSpec( {
     }
 } )
 
-fun updateAccount(testEngine: TestApplicationEngine, account: ResponseAccount): Pair<ResponseAccount, HttpStatusCode> {
+fun updateAccount(gson: Gson, testEngine: TestApplicationEngine, account: ResponseAccount): Pair<ResponseAccount, HttpStatusCode> {
     val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
         setBody(gson.toJson(account))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())

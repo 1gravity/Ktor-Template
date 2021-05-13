@@ -4,7 +4,9 @@ object Dependency {
 
     private const val ktorVersion = "1.5.3"
     private const val koinVersion = "3.0.1"
+
     private const val kotlinSerializationVersion = "1.1.0"
+    private const val moshiVersion = "1.12.0"
 
     private const val postgresVersion = "42.2.20"
     private const val ktormVersion = "3.3.0"
@@ -38,6 +40,8 @@ object Dependency {
         "org.jetbrains.kotlinx:kotlinx-serialization-core" to kotlinSerializationVersion,
         // GSON Serialization / Deserialization
         "io.ktor:ktor-gson" to ktorVersion,
+        // Moshi
+        "com.squareup.moshi:moshi-kotlin" to moshiVersion,
 
         // Postgres
         "org.postgresql:postgresql" to postgresVersion,

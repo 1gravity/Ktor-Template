@@ -1,7 +1,6 @@
-package com.onegravity.accountservice.application
+package com.onegravity.module
 
-import com.onegravity.accountservice.util.Config
-import com.onegravity.accountservice.util.getKoinInstance
+import com.onegravity.util.getKoinInstance
 import com.papsign.ktor.openapigen.OpenAPIGen
 import com.papsign.ktor.openapigen.openAPIGen
 import com.papsign.ktor.openapigen.schema.namer.DefaultSchemaNamer
@@ -10,6 +9,7 @@ import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlin.reflect.KType
+import com.onegravity.config.Config
 
 fun Application.openAPIGenerator() {
 
@@ -28,14 +28,6 @@ fun Application.openAPIGenerator() {
                 name = serviceContact
                 email = serviceEmail
             }
-        }
-
-        val protocol = config.getProperty("ktor.openapi.protocol")
-        val host = config.getProperty("ktor.openapi.host")
-        val port = config.getProperty("ktor.openapi.port")
-        val portString = if (port?.isNotEmpty() == true) ":$port" else ""
-        server("$protocol://$host$portString") {
-            description = serviceName
         }
 
         // rename DTOs from java type name to generator compatible form

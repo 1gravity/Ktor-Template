@@ -2,12 +2,9 @@
 
 package com.onegravity.accountservice.util
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.onegravity.accountservice.application.applicationModule
-import com.onegravity.accountservice.application.configureGson
-import com.onegravity.accountservice.application.mainModule
+import com.onegravity.accountservice.applicationModule
 import com.onegravity.accountservice.controller.controllerModule
+import com.onegravity.accountservice.mainModule
 import com.onegravity.accountservice.persistence.model.DaoProvider
 import com.onegravity.accountservice.persistence.model.exposed.ExposedDaoProvider
 import com.onegravity.accountservice.persistence.model.ktorm.KtormDaoProvider
@@ -21,7 +18,6 @@ import org.koin.core.context.GlobalContext.loadKoinModules
 import org.koin.core.context.GlobalContext.stopKoin
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import io.ktor.server.testing.withTestApplication
 
 private fun Application.ktormApp() { mainModule {
     testDI(environment) { KtormDaoProvider(TestDatabaseConfigImpl) }
@@ -33,7 +29,7 @@ private fun Application.exposeApp() { mainModule {
 
 fun testDI(environment: ApplicationEnvironment, getProvider: () -> DaoProvider) {
     startKoin {
-        modules(applicationModule(environment))
+        modules(applicationModule(environment, gson))
     }
     // there's a dependency between these two modules so we need to load them sequentially
     loadKoinModules(module {
@@ -78,7 +74,3 @@ private fun testApp(
         }
     }
 }
-
-val gson: Gson = GsonBuilder()
-    .apply { configureGson(this) }
-    .create()

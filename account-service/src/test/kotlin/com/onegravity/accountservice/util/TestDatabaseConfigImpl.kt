@@ -1,5 +1,7 @@
 package com.onegravity.accountservice.util
 
+import com.onegravity.config.Config
+import com.onegravity.config.DatabaseConfig
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.testcontainers.containers.PostgreSQLContainer

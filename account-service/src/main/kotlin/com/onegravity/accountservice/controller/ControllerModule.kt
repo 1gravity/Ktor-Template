@@ -7,5 +7,4 @@ val controllerModule = KoinModule {
     single<CustomerController> { MasterController }
     single<DeviceController> { MasterController }
     single<EmailController> { MasterController }
-    single<HealthController> { MasterController }
 }

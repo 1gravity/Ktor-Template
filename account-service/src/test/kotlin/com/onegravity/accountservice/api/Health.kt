@@ -1,8 +1,10 @@
 package com.onegravity.accountservice.api
 
-import com.onegravity.accountservice.route.model.ServiceStatus
+import com.google.gson.Gson
 import com.onegravity.accountservice.util.*
-import com.onegravity.accountservice.util.Config
+import com.onegravity.config.Config
+import com.onegravity.route.ServiceStatus
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -17,6 +19,7 @@ class HealthTest : BehaviorSpec({
     // GET /status
     testApp(this) { testEngine, _ ->
         val config = getKoinInstance<Config>()
+        val gson = getKoinInstance<Gson>()
 
         `when`("I call GET /status") {
             val call = testEngine.handleRequest(HttpMethod.Get, "/status")

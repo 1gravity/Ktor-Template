@@ -5,7 +5,7 @@ import com.onegravity.accountservice.persistence.model.Dao
 import com.onegravity.accountservice.route.model.customer.CreateCustomer
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.route.model.customer.UpdateCustomer
-import com.onegravity.accountservice.util.NotFoundException
+import com.onegravity.util.NotFoundException
 import org.ktorm.database.Database
 import org.ktorm.dsl.eq
 import org.ktorm.entity.*

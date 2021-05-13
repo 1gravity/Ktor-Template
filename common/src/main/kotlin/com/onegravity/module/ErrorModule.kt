@@ -1,7 +1,7 @@
-package com.onegravity.accountservice.application
+package com.onegravity.module
 
-import com.onegravity.accountservice.util.*
-import com.onegravity.accountservice.util.NotFoundException
+import com.onegravity.util.*
+import com.onegravity.util.NotFoundException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*

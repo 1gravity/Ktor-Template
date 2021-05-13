@@ -3,7 +3,7 @@ package com.onegravity.accountservice.persistence
 import com.onegravity.accountservice.persistence.model.DaoProvider
 import com.onegravity.accountservice.persistence.model.exposed.ExposedDaoProvider
 import com.onegravity.accountservice.persistence.model.ktorm.KtormDaoProvider
-import com.onegravity.accountservice.util.DatabaseConfigImpl
+import com.onegravity.config.DatabaseConfigImpl
 import io.ktor.application.*
 import org.ktorm.logging.LogLevel
 import org.koin.dsl.module as KoinModule

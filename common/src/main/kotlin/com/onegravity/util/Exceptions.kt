@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.util
+package com.onegravity.util
 
 import com.papsign.ktor.openapigen.annotations.type.common.ConstraintViolation
 

@@ -5,7 +5,7 @@ import com.onegravity.accountservice.route.misc.*
 import com.onegravity.accountservice.route.model.account.CreateAccount
 import com.onegravity.accountservice.route.model.account.ResponseAccount
 import com.onegravity.accountservice.route.model.account.UpdateAccount
-import com.onegravity.accountservice.util.getKoinInstance
+import com.onegravity.util.getKoinInstance
 import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.*
 import com.papsign.ktor.openapigen.route.response.respond

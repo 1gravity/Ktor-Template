@@ -1,11 +1,13 @@
 package com.onegravity.accountservice.api.customer
 
+import com.google.gson.Gson
 import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.persistence.model.CustomerStatus
 import com.onegravity.accountservice.persistence.model.Language
 import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.util.testApps
+import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.GivenScope
 import io.kotest.matchers.shouldBe
@@ -17,19 +19,21 @@ import java.util.*
 @Suppress("unused")
 class CreateCustomer : BehaviorSpec( {
     testApps(this) { testEngine, prefix ->
+        val gson = getKoinInstance<Gson>()
+
         // create test account
-        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active)
+        val (newAccount, _) = createAccount(testEngine, AccountStatus.Active, gson)
         val accountUUID = newAccount.accountUUID
 
         val uuid = UUID.randomUUID().toString()
         val now = Instant.now()
-        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Active, "Tom", "Sawyer", Language.en, accountUUID))
-        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Deleted, "Kunigunde", "MacQuoid", Language.de, accountUUID))
-        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Blocked, "Abigail", "Thornton", Language.en, accountUUID))
+        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Active, "Tom", "Sawyer", Language.en, accountUUID), gson)
+        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Deleted, "Kunigunde", "MacQuoid", Language.de, accountUUID), gson)
+        createAndTestCustomer(testEngine, TestCustomer(uuid, now, now, CustomerStatus.Blocked, "Abigail", "Thornton", Language.en, accountUUID), gson)
 
         `when`("$prefix - I call POST /api/v1/admin/customer with an invalid uuid") {
             val customer = TestCustomer(null, now, now, CustomerStatus.Blocked, "Abigail", "Thornton", Language.en, "123456")
-            val (_, status) = createCustomer(testEngine, customer)
+            val (_, status) = createCustomer(testEngine, customer, gson)
 
             then("the response status should be HTTP 400 BadRequest") {
                 status shouldBe HttpStatusCode.BadRequest
@@ -38,7 +42,7 @@ class CreateCustomer : BehaviorSpec( {
 
         `when`("$prefix - I call POST /api/v1/admin/customer with a non existing uuid") {
             val customer = TestCustomer(null, now, now, CustomerStatus.Blocked, "Abigail", "Thornton", Language.en, "00000000-0000-0000-0000-000000000000")
-            val (_, status) = createCustomer(testEngine, customer)
+            val (_, status) = createCustomer(testEngine, customer, gson)
 
             then("the response status should be HTTP 404 NotFound") {
                 status shouldBe HttpStatusCode.NotFound
@@ -78,8 +82,9 @@ class CreateCustomer : BehaviorSpec( {
     }
 } )
 
-suspend fun GivenScope.createAndTestCustomer(testEngine: TestApplicationEngine, customer: TestCustomer): Pair<ResponseCustomer?, HttpStatusCode> {
-    val (createdCustomer, status) = createCustomer(testEngine, customer)
+suspend fun GivenScope.createAndTestCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gson: Gson):
+        Pair<ResponseCustomer?, HttpStatusCode> {
+    val (createdCustomer, status) = createCustomer(testEngine, customer, gson)
 
     `when`("I call POST /api/v1/admin/customer (${Random().nextInt()})") {
 
