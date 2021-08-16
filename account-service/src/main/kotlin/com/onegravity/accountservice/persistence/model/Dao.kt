@@ -13,7 +13,7 @@ interface Dao<OBJECT, INSERT, UPDATE> {
     fun insert(`object`: INSERT): OBJECT
 
     @Throws(NotFoundException::class)
-    fun update(`object`: UPDATE): OBJECT
+    fun update(uuid: String, `object`: UPDATE): OBJECT
 
     @Throws(NotFoundException::class)
     fun delete(uuid: String): OBJECT

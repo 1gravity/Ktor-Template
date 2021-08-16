@@ -1,6 +1,5 @@
 package com.onegravity.accountservice.api.customer
 
-import com.github.michaelbull.result.runCatching
 import com.google.gson.Gson
 import com.onegravity.accountservice.api.account.verifyAccount
 import com.onegravity.accountservice.persistence.model.CustomerStatus
@@ -36,7 +35,7 @@ fun createCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gs
         gson.fromJson(call.response.content.toString(), ResponseCustomer::class.java)
     }
 
-    val responseCustomer = result.component1()
+    val responseCustomer = result.getOrNull()
     assertNotNull(responseCustomer)
     return Pair(responseCustomer, call.response.status() ?: HttpStatusCode.InternalServerError)
 }

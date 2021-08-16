@@ -1,4 +1,4 @@
-package com.onegravity.accountservice.api
+package com.onegravity.accountservice.api.misc
 
 import com.google.gson.Gson
 import com.onegravity.accountservice.util.*

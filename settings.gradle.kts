@@ -8,4 +8,3 @@ include(
 
 // referencing a local project goes like this:
 // project(":OpenAPI-Generator").projectDir = File("../Ktor-OpenAPI-Generator")
-include("common")

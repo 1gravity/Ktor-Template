@@ -9,7 +9,7 @@ import com.onegravity.accountservice.route.model.customer.ResponseCustomer
 import com.onegravity.accountservice.util.testApps
 import com.onegravity.util.getKoinInstance
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.core.spec.style.scopes.GivenScope
+import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerContext as Context
 import io.kotest.matchers.shouldBe
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -82,7 +82,7 @@ class CreateCustomer : BehaviorSpec( {
     }
 } )
 
-suspend fun GivenScope.createAndTestCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gson: Gson):
+suspend fun Context.createAndTestCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gson: Gson):
         Pair<ResponseCustomer?, HttpStatusCode> {
     val (createdCustomer, status) = createCustomer(testEngine, customer, gson)
 

@@ -16,7 +16,7 @@ interface AccountController {
     suspend fun createAccount(account: CreateAccount): ResponseAccount
 
     @Throws(NotFoundException::class)
-    suspend fun updateAccount(account: UpdateAccount): ResponseAccount
+    suspend fun updateAccount(accountUUID: String, account: UpdateAccount): ResponseAccount
 
     @Throws(NotFoundException::class)
     suspend fun deleteAccount(accountUUID: String): ResponseAccount

@@ -1,6 +1,5 @@
 package com.onegravity.accountservice.api.account
 
-import com.github.michaelbull.result.runCatching
 import com.google.gson.Gson
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.route.model.account.ResponseAccount
@@ -22,7 +21,7 @@ class UpdateAccount : BehaviorSpec( {
 
         val (newAccount, _) = createAccount(testEngine, AccountStatus.Active, gson)
 
-        `when`("$prefix - I call PUT /api/v1/admin/accounts") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts/{accountUUID}") {
             val (updatedAccount, status) = updateAccount(gson, testEngine, newAccount)
 
             then("the updated account should not be null") {
@@ -47,7 +46,7 @@ class UpdateAccount : BehaviorSpec( {
 
         val account2Update = ResponseAccount(newAccount.accountUUID, Instant.now(), Instant.now(), AccountStatus.Blocked)
 
-        `when`("$prefix - I call PUT /api/v1/admin/accounts with updated fields") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts/{accountUUID} with updated fields") {
             val (updatedAccount, status) = updateAccount(gson, testEngine, account2Update)
 
             then("the updated account should not be null") {
@@ -73,9 +72,9 @@ class UpdateAccount : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/accounts with an invalid uuid") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts/{accountUUID} with an invalid uuid") {
             val account = ResponseAccount("123456", Instant.now(), Instant.now(), AccountStatus.Blocked)
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/123456") {
                 setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
@@ -85,9 +84,9 @@ class UpdateAccount : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/accounts with a non existing uuid") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts/{accountUUID} with a non existing uuid") {
             val account = ResponseAccount("00000000-0000-0000-0000-000000000000", Instant.now(), Instant.now(), AccountStatus.Blocked)
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/00000000-0000-0000-0000-000000000000") {
                 setBody(gson.toJson(account))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
@@ -97,8 +96,8 @@ class UpdateAccount : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/accounts with an invalid account status") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+        `when`("$prefix - I call PUT /api/v1/admin/accounts/{accountUUID} with an invalid account status") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/${newAccount.accountUUID}") {
                 setBody("{" +
                         "    \"accountUUID\": \"${newAccount.accountUUID}\",\n" +
                         "    \"status\": \"NotActive\"\n" +
@@ -115,7 +114,7 @@ class UpdateAccount : BehaviorSpec( {
 } )
 
 fun updateAccount(gson: Gson, testEngine: TestApplicationEngine, account: ResponseAccount): Pair<ResponseAccount, HttpStatusCode> {
-    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts") {
+    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/accounts/${account.accountUUID}") {
         setBody(gson.toJson(account))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
     }
@@ -124,7 +123,7 @@ fun updateAccount(gson: Gson, testEngine: TestApplicationEngine, account: Respon
         gson.fromJson(call.response.content.toString(), ResponseAccount::class.java)
     }
 
-    val responseAccount = result.component1()
+    val responseAccount = result.getOrNull()
     assertNotNull(responseAccount)
     return Pair(responseAccount, call.response.status() ?: HttpStatusCode.InternalServerError)
 }

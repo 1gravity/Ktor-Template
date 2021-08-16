@@ -41,9 +41,9 @@ class CustomerDao(private val accountDao: AccountDao, private val database: Data
         return get(newCustomer.customerUUID)
     }
 
-    override fun update(`object`: UpdateCustomer): ResponseCustomer {
+    override fun update(uuid: String, `object`: UpdateCustomer): ResponseCustomer {
         database.sequenceOf(Customers)
-            .firstOrNull { Customers.customerUUID eq `object`.customerUUID }
+            .firstOrNull { Customers.customerUUID eq uuid }
             ?.apply {
                 `object`.firstName?.run { firstName = this }
                 `object`.lastName?.run { lastName = this }
@@ -52,7 +52,7 @@ class CustomerDao(private val accountDao: AccountDao, private val database: Data
                 modifiedAt = Instant.now()
                 flushChanges()
             }
-        return get(`object`.customerUUID)
+        return get(uuid)
     }
 
     override fun delete(uuid: String): ResponseCustomer {

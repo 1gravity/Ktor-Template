@@ -68,7 +68,7 @@ fun NormalOpenAPIRoute.customerRouting() {
             /**
              * Update a customer.
              */
-            put<Unit, ResponseCustomer, UpdateCustomer>(
+            put<CustomerUUIDParam, ResponseCustomer, UpdateCustomer>(
                 info(
                     summary = "Update a customer.",
                     description = "Update an existing customer record"
@@ -76,8 +76,9 @@ fun NormalOpenAPIRoute.customerRouting() {
                 exceptions = listOf(badRequest, customerNotFound),
                 exampleRequest = customerUpdateExample,
                 exampleResponse = customerExampleResponse
-            ) { _, customer ->
-                val updateCustomer = controller.updateCustomer(customer)
+            ) { params, customer ->
+                val customerUUID = params.customerUUID
+                val updateCustomer = controller.updateCustomer(customerUUID, customer)
                 respond(updateCustomer)
             }
 

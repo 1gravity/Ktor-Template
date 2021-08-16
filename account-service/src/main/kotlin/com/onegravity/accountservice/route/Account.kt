@@ -66,7 +66,7 @@ fun NormalOpenAPIRoute.accountRouting() {
             /**
              * Update an account.
              */
-            put<Unit, ResponseAccount, UpdateAccount>(
+            put<AccountUUIDParam, ResponseAccount, UpdateAccount>(
                 info(
                     summary = "Update an account.",
                     description = "Update an account record"
@@ -74,8 +74,9 @@ fun NormalOpenAPIRoute.accountRouting() {
                 exceptions = listOf(badRequest, accountNotFound),
                 exampleRequest = accountUpdateExample,
                 exampleResponse = accountExampleResponse
-            ) { _, account ->
-                val updateAccount = controller.updateAccount(account)
+            ) { params, account ->
+                val accountUUID = params.accountUUID
+                val updateAccount = controller.updateAccount(accountUUID, account)
                 respond(updateAccount)
             }
 

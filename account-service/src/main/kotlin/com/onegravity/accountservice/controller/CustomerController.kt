@@ -16,7 +16,7 @@ interface CustomerController {
     suspend fun createCustomer(customer: CreateCustomer): ResponseCustomer
 
     @Throws(NotFoundException::class)
-    suspend fun updateCustomer(customer: UpdateCustomer): ResponseCustomer
+    suspend fun updateCustomer(customerUUID: String, customer: UpdateCustomer): ResponseCustomer
 
     @Throws(NotFoundException::class)
     suspend fun deleteCustomer(customerUUID: String): ResponseCustomer

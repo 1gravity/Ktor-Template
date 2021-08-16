@@ -2,7 +2,7 @@ package com.onegravity
 
 object Plugin {
 
-    private const val kotlinVersion = "1.4.32"
+    private const val kotlinVersion = "1.5.21"
     private const val shadowVersion = "7.0.0"
 
     // https://plugins.gradle.org/plugin/org.barfuin.gradle.taskinfo

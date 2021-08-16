@@ -1,7 +1,5 @@
 package com.onegravity.adapter
 
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
@@ -18,10 +16,8 @@ object GsonInstantAdapter: TypeAdapter<Instant>() {
     }
 
     override fun read(reader: JsonReader) =
-        runCatching {
-            Instant.parse(reader.nextString())
-        }.onFailure {
-            throw ValidationException(it.message ?: it.javaClass.simpleName)
-        }.component1()
+        runCatching{ Instant.parse(reader.nextString()) }
+            .onFailure { throw ValidationException(it.message ?: it.javaClass.simpleName) }
+            .getOrNull()
 
 }

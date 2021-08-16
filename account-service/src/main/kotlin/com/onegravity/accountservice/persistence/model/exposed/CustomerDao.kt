@@ -45,9 +45,9 @@ class CustomerDao(private val accountDao: AccountDao) :
         }
     }
 
-    override fun update(`object`: UpdateCustomer): ResponseCustomer {
+    override fun update(uuid: String, `object`: UpdateCustomer): ResponseCustomer {
         return transaction {
-            getCustomer(`object`.customerUUID).apply {
+            getCustomer(uuid).apply {
                 `object`.firstName?.run { firstName = this }
                 `object`.lastName?.run { lastName = this }
                 `object`.status?.run { status = this }
@@ -55,7 +55,7 @@ class CustomerDao(private val accountDao: AccountDao) :
                 modifiedAt = Instant.now().toDateTime()
             }
 
-            get(`object`.customerUUID)
+            get(uuid)
         }
     }
 

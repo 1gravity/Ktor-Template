@@ -1,6 +1,5 @@
 package com.onegravity.accountservice.api.customer
 
-import com.github.michaelbull.result.runCatching
 import com.google.gson.Gson
 import com.onegravity.accountservice.api.account.createAccount
 import com.onegravity.accountservice.persistence.model.AccountStatus
@@ -39,7 +38,7 @@ class UpdateCustomer : BehaviorSpec( {
             newCustomer.account.accountUUID
         )
 
-        `when`("$prefix - I call PUT /api/v1/admin/customers") {
+        `when`("$prefix - I call PUT /api/v1/admin/customers/{customerUUID}") {
             val (updatedCustomer, status) = updateCustomer(testEngine, testCustomer, gson)
 
             then("the updated customer should not be null") {
@@ -67,7 +66,7 @@ class UpdateCustomer : BehaviorSpec( {
 
         val customer2Update = TestCustomer(testCustomer.customerUUID, Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
 
-        `when`("$prefix - I call PUT /api/v1/admin/customers with updated fields") {
+        `when`("$prefix - I call PUT /api/v1/admin/customers/{customerUUID} with updated fields") {
             val (updatedCustomer, status) = updateCustomer(testEngine, customer2Update, gson)
 
             then("the response status should be OK") {
@@ -93,7 +92,7 @@ class UpdateCustomer : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/customers with an invalid customerUUID") {
+        `when`("$prefix - I call PUT /api/v1/admin/customers/{customerUUID} with an invalid customerUUID") {
             val customer = TestCustomer("123456", Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
             val (_, status) = updateCustomer(testEngine, customer, gson)
 
@@ -102,7 +101,7 @@ class UpdateCustomer : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/customers with a non existing customerUUID") {
+        `when`("$prefix - I call PUT /api/v1/admin/customers/{customerUUID} with a non existing customerUUID") {
             val customer = TestCustomer("00000000-0000-0000-0000-000000000000", Instant.now(), Instant.now(), CustomerStatus.Blocked, "Freddy", "Kruger", Language.de)
             val (_, status) = updateCustomer(testEngine, customer, gson)
 
@@ -111,8 +110,8 @@ class UpdateCustomer : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/customer with an invalid customer status") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers") {
+        `when`("$prefix - I call PUT /api/v1/admin/customer/{customerUUID} with an invalid customer status") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers/${testCustomer.customerUUID}") {
                 setBody("{" +
                         "    \"customerUUID\": \"${testCustomer.customerUUID}\",\n" +
                         "    \"status\": \"NotActive\"\n" +
@@ -126,8 +125,8 @@ class UpdateCustomer : BehaviorSpec( {
             }
         }
 
-        `when`("$prefix - I call PUT /api/v1/admin/customer with an invalid language") {
-            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers") {
+        `when`("$prefix - I call PUT /api/v1/admin/customer/{customerUUID} with an invalid language") {
+            val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers/${testCustomer.customerUUID}") {
                 setBody("{" +
                         "    \"customerUUID\": \"${testCustomer.customerUUID}\",\n" +
                         "    \"language\": \"invalid_language\"\n" +
@@ -145,7 +144,7 @@ class UpdateCustomer : BehaviorSpec( {
 
 fun updateCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gson: Gson):
         Pair<ResponseCustomer, HttpStatusCode> {
-    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers") {
+    val call = testEngine.handleRequest(HttpMethod.Put, "/api/v1/admin/customers/${customer.customerUUID}") {
         setBody(gson.toJson(customer))
         addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
     }
@@ -154,7 +153,7 @@ fun updateCustomer(testEngine: TestApplicationEngine, customer: TestCustomer, gs
         gson.fromJson(call.response.content.toString(), ResponseCustomer::class.java)
     }
 
-    val responseCustomer = result.component1()
+    val responseCustomer = result.getOrNull()
     assertNotNull(responseCustomer)
     return Pair(responseCustomer, call.response.status() ?: HttpStatusCode.InternalServerError)
 }

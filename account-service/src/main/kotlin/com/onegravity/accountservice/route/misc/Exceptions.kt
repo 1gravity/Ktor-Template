@@ -1,7 +1,7 @@
 package com.onegravity.accountservice.route.misc
 
 import com.onegravity.util.NotFoundException
-import com.papsign.ktor.openapigen.APIException.APIExceptionBuilder.Companion.apiException
+import com.papsign.ktor.openapigen.exception.APIExceptionBuilder.Companion.apiException
 import com.papsign.ktor.openapigen.annotations.type.common.ConstraintViolation
 import io.ktor.http.*
 import kotlinx.serialization.Serializable

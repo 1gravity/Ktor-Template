@@ -2,7 +2,7 @@ package com.onegravity.module
 
 import com.onegravity.util.getKoinInstance
 import com.papsign.ktor.openapigen.OpenAPIGen
-import com.papsign.ktor.openapigen.openAPIGen
+import com.papsign.ktor.openapigen.util.openAPIGen
 import com.papsign.ktor.openapigen.schema.namer.DefaultSchemaNamer
 import com.papsign.ktor.openapigen.schema.namer.SchemaNamer
 import io.ktor.application.*

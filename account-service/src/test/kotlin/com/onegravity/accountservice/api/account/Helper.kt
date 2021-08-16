@@ -1,6 +1,5 @@
 package com.onegravity.accountservice.api.account
 
-import com.github.michaelbull.result.runCatching
 import com.google.gson.Gson
 import com.onegravity.accountservice.persistence.model.AccountStatus
 import com.onegravity.accountservice.route.misc.uuidPattern
@@ -26,7 +25,7 @@ fun createAccount(testEngine: TestApplicationEngine, status: AccountStatus, gson
     val result = runCatching {
         gson.fromJson(call.response.content.toString(), ResponseAccount::class.java)
     }
-    val responseAccount = result.component1()
+    val responseAccount = result.getOrNull()
     assertNotNull(responseAccount)
     return Pair(responseAccount, call.response.status() ?: HttpStatusCode.InternalServerError)
 }

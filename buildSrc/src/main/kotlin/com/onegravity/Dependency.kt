@@ -2,25 +2,24 @@ package com.onegravity
 
 object Dependency {
 
-    private const val ktorVersion = "1.5.3"
-    private const val koinVersion = "3.0.1"
+    private const val ktorVersion = "1.6.2"
+    private const val koinVersion = "3.1.0"
 
-    private const val kotlinSerializationVersion = "1.1.0"
+    private const val kotlinSerializationVersion = "1.2.2"
     private const val moshiVersion = "1.12.0"
 
     private const val postgresVersion = "42.2.20"
-    private const val ktormVersion = "3.3.0"
+    private const val ktormVersion = "3.4.1"
     private const val exposedVersion = "0.17.13"
-    private const val flywayVersion = "7.7.1"
-    private const val hikariCPVersion = "4.0.3"
+    private const val flywayVersion = "7.13.0"
+    private const val hikariCPVersion = "5.0.0"
 
-    private const val openApiGenVersion = "0.2-beta.17"
-    private const val kotlinResultVersion = "1.1.11"
+    private const val openApiGenVersion = "0.2-beta.20"
     private const val logbackVersion = "1.2.3"
     private const val dotenvVersion = "6.2.2"
 
-    private const val kotestVersion = "4.4.3"
-    private const val testcontainersVersion = "1.15.3"
+    private const val kotestVersion = "4.6.1"
+    private const val testcontainersVersion = "1.16.0"
 
     val implementation = mapOf(
         // Ktor Server
@@ -30,6 +29,10 @@ object Dependency {
         // Monitoring metrics
         "io.ktor:ktor-metrics" to ktorVersion,
         "io.ktor:ktor-metrics-micrometer" to ktorVersion,
+
+        // Security
+        "io.ktor:ktor-auth" to ktorVersion,
+        "io.ktor:ktor-auth-jwt" to ktorVersion,
 
         // Koin / Dependency Injection
         "io.insert-koin:koin-ktor" to koinVersion,
@@ -60,7 +63,6 @@ object Dependency {
         "com.github.1gravity:Ktor-OpenAPI-Generator" to openApiGenVersion,
 
         // Miscellaneous
-        "com.michael-bull.kotlin-result:kotlin-result" to kotlinResultVersion,
         "io.github.cdimascio:dotenv-kotlin" to dotenvVersion,
 
         // Logging
@@ -71,6 +73,7 @@ object Dependency {
 
     val testImplementation = mapOf(
         "io.ktor:ktor-server-tests" to ktorVersion,
+        "org.jetbrains.kotlin:kotlin-test" to "1.5.21",
 
         // Kotest
         "io.kotest:kotest-runner-junit5" to kotestVersion,
@@ -82,13 +85,5 @@ object Dependency {
         "org.testcontainers:junit-jupiter" to testcontainersVersion,
         "org.testcontainers:postgresql" to testcontainersVersion
     ).toStringList()
-
-    private fun Map<*, *>.toStringList(): List<String> {
-        val result = ArrayList<String>()
-        keys.forEach {
-            result.add("$it:${this[it]}")
-        }
-        return result
-    }
 
 }

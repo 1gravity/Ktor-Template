@@ -22,7 +22,8 @@ object MasterController : AccountController, CustomerController, EmailController
 
     override suspend fun createAccount(account: CreateAccount) = accounts.insert(account)
 
-    override suspend fun updateAccount(account: UpdateAccount) = accounts.update(account)
+    override suspend fun updateAccount(accountUUID: String, account: UpdateAccount) =
+        accounts.update(accountUUID, account)
 
     override suspend fun deleteAccount(accountUUID: String) = accounts.delete(accountUUID)
 
@@ -36,7 +37,8 @@ object MasterController : AccountController, CustomerController, EmailController
 
     override suspend fun createCustomer(customer: CreateCustomer) = customers.insert(customer)
 
-    override suspend fun updateCustomer(customer: UpdateCustomer) = customers.update(customer)
+    override suspend fun updateCustomer(customerUUID: String, customer: UpdateCustomer) =
+        customers.update(customerUUID, customer)
 
     override suspend fun deleteCustomer(customerUUID: String) = customers.delete(customerUUID)
 

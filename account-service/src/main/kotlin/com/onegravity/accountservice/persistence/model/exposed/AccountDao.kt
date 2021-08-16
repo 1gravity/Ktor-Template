@@ -43,14 +43,14 @@ class AccountDao : Dao<ResponseAccount, CreateAccount, UpdateAccount> {
         }
     }
 
-    override fun update(`object`: UpdateAccount): ResponseAccount {
+    override fun update(uuid: String, `object`: UpdateAccount): ResponseAccount {
         return transaction {
-            getAccount(`object`.accountUUID).apply {
+            getAccount(uuid).apply {
                 `object`.status?.run { status = this }
                 modifiedAt = Instant.now().toDateTime()
             }
 
-            get(`object`.accountUUID)
+            get(uuid)
         }
     }
 

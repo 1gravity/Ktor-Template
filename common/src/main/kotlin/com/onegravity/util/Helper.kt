@@ -2,7 +2,6 @@
 
 package com.onegravity.util
 
-import com.github.michaelbull.result.onFailure
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import org.koin.core.component.KoinComponent
@@ -18,7 +17,7 @@ inline fun <reified T> getKoinInstance() =
  * To remedy that we need custom adapters.
  */
 fun <T: Enum<T>> writeEnum(writer: JsonWriter, value: T) {
-    com.github.michaelbull.result.runCatching {
+    runCatching {
         writer.value(value.name)
     }.onFailure {
         throw ValidationException(it.message ?: it.javaClass.simpleName)
@@ -26,11 +25,11 @@ fun <T: Enum<T>> writeEnum(writer: JsonWriter, value: T) {
 }
 
 inline fun <reified T: Enum<T>> readEnum(reader: JsonReader) =
-    com.github.michaelbull.result.runCatching {
+    runCatching {
         enumValueOf<T>(reader.nextString())
     }.onFailure {
         throw ValidationException(it.message ?: it.javaClass.simpleName)
-    }.component1()
+    }.getOrNull()
 
 inline fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
     return if (p1 != null && p2 != null) block(p1, p2) else null

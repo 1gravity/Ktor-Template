@@ -38,15 +38,15 @@ class AccountDao(private val database: Database) : Dao<ResponseAccount, CreateAc
         return get(newAccount.accountUUID)
     }
 
-    override fun update(`object`: UpdateAccount): ResponseAccount {
+    override fun update(uuid: String, `object`: UpdateAccount): ResponseAccount {
         database.sequenceOf(Accounts)
-            .firstOrNull { Accounts.accountUUID eq `object`.accountUUID }
+            .firstOrNull { Accounts.accountUUID eq uuid }
             ?.apply {
                 `object`.status?.run { status = this }
                 modifiedAt = Instant.now()
                 flushChanges()
             }
-        return get(`object`.accountUUID)
+        return get(uuid)
     }
 
     override fun delete(uuid: String): ResponseAccount {
