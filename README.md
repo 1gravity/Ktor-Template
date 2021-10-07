@@ -7,6 +7,7 @@ This article explains everything in great detail: [An opinionated Kotlin backend
 
 - clone the repo
 - cd into Ktor-Template
+- copy `.env.sample` into `.env`
 - run docker-compose up (or sudo docker-compose up)
 - Open http://localhost:2000
 
