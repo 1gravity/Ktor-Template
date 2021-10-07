@@ -12,7 +12,7 @@ object Dependency {
     private const val ktormVersion = "3.4.1"
     private const val exposedVersion = "0.17.13"
     private const val flywayVersion = "7.13.0"
-    private const val hikariCPVersion = "5.0.0"
+    private const val hikariCPVersion = "4.0.3"
 
     private const val openApiGenVersion = "0.2-beta.20"
     private const val logbackVersion = "1.2.3"
