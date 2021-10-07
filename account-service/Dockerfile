@@ -8,9 +8,7 @@ FROM gradle AS build
 WORKDIR /appbuild
 COPY . /appbuild
 
-# better safe than sorry
-RUN gradle wrapper
-RUN ./gradlew :account-service:clean :account-service:assemble
+RUN gradle :account-service:clean :account-service:assemble
 
 # Deploy jar
 
