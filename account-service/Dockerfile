@@ -3,7 +3,7 @@
 
 # Build jar
 
-FROM gradle AS build
+FROM gradle:7.2-jdk8 AS build
 
 WORKDIR /appbuild
 COPY . /appbuild

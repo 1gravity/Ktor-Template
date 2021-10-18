@@ -12,7 +12,7 @@ object Plugin {
     val topLevelPlugins = mapOf(
         "org.jetbrains.kotlin.jvm" to kotlinVersion,
         "org.jetbrains.kotlin.plugin.serialization" to kotlinVersion,
-        "org.barfuin.gradle.taskinfo" to taskinfoVersion,
+        "org.barfuin.gradle.taskinfo" to taskinfoVersion
     )
 
     val modulePlugins = mapOf(
