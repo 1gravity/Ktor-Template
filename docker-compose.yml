@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   postgres:
-    image: postgres:13.2
+    image: postgres:13.3-alpine
     container_name: postgres
     restart: always
     volumes:
@@ -9,7 +9,7 @@ services:
       - ./bin/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./docker-databases:/docker-entrypoint-initdb.d
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -23,7 +23,7 @@ services:
     container_name: account
     restart: always
     ports:
-      - 2000:8002
+      - "2000:8002"
     depends_on:
       - postgres
     environment:
