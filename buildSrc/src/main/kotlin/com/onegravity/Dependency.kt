@@ -2,23 +2,23 @@ package com.onegravity
 
 object Dependency {
 
-    private const val ktorVersion = "1.6.2"
-    private const val koinVersion = "3.1.0"
+    private const val ktorVersion = "1.6.4"
+    private const val koinVersion = "3.1.2"
 
-    private const val kotlinSerializationVersion = "1.2.2"
+    private const val kotlinSerializationVersion = "1.3.0"
     private const val moshiVersion = "1.12.0"
 
-    private const val postgresVersion = "42.2.20"
+    private const val postgresVersion = "42.3.0"
     private const val ktormVersion = "3.4.1"
-    private const val exposedVersion = "0.17.13"
-    private const val flywayVersion = "7.13.0"
+    private const val exposedVersion = "0.17.14"
+    private const val flywayVersion = "8.0.1"
     private const val hikariCPVersion = "4.0.3"
 
     private const val openApiGenVersion = "0.2-beta.20"
-    private const val logbackVersion = "1.2.3"
+    private const val logbackVersion = "1.2.6"
     private const val dotenvVersion = "6.2.2"
 
-    private const val kotestVersion = "4.6.1"
+    private const val kotestVersion = "4.6.3"
     private const val testcontainersVersion = "1.16.0"
 
     val implementation = mapOf(
@@ -73,7 +73,7 @@ object Dependency {
 
     val testImplementation = mapOf(
         "io.ktor:ktor-server-tests" to ktorVersion,
-        "org.jetbrains.kotlin:kotlin-test" to "1.5.21",
+        "org.jetbrains.kotlin:kotlin-test" to Plugin.kotlinVersion,
 
         // Kotest
         "io.kotest:kotest-runner-junit5" to kotestVersion,

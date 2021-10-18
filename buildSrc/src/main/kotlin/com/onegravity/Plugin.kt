@@ -2,8 +2,8 @@ package com.onegravity
 
 object Plugin {
 
-    private const val kotlinVersion = "1.5.21"
-    private const val shadowVersion = "7.0.0"
+    const val kotlinVersion = "1.5.31"
+    private const val shadowVersion = "7.1.0"
 
     // https://plugins.gradle.org/plugin/org.barfuin.gradle.taskinfo
     // retrieve task dependencies and types, e.g. with ./gradlew tiTree assemble
