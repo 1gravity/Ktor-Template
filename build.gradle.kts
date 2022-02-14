@@ -9,14 +9,12 @@ plugins {
 buildscript {
     repositories {
         mavenCentral()
-        maven("https://dl.bintray.com/kotlin/ktor")
     }
 }
 
 allprojects {
     repositories {
         mavenCentral()
-        maven("https://dl.bintray.com/kotlin/ktor")
         maven("https://jitpack.io")
     }
 
